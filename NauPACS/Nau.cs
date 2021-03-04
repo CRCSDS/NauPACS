@@ -1,24 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using PACS_Dades;
+using System;
 using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using PACS_Dades;
 
 namespace NauPACS
 {
     public partial class Nau : Form
     {
+
         //2 CLIENTS UNO PARA TEXTOS Y OTRO PARA ARCHIVOS
-        TcpClient client;
+
+        TcpClient client = new TcpClient();
         Thread t1, t2;
         Boolean xarxaDisponible;
         Ping myPing = new Ping();
@@ -30,8 +29,19 @@ namespace NauPACS
         String data = null;
 
         Dades bbdd = new Dades();
-
         DataSet inici;
+
+        byte[] EncryptedData;
+        RSACryptoServiceProvider rsaEnc = new RSACryptoServiceProvider();
+        private Color Colors;
+
+        IPAddress PlanetIPAdress;
+
+        //IPAddress address = IPAddress.Parse("10.0.2.45");
+
+        Int32 PlanetPortNumber;
+
+
 
         public Nau()
         {
@@ -45,11 +55,14 @@ namespace NauPACS
             t1.Start();
         }
 
-            private void Connectar() {
+        private void Connectar()
+        {
+            ConnectedPanel.BackColor = Color.Gray;
+            DisconnectedPanel.BackColor = Color.Gray;
 
             for (int i = 0; i < 11; i++)
             {
-               //PING
+                //PING
                 try
                 {
                     xarxaDisponible = NetworkInterface.GetIsNetworkAvailable();
@@ -57,39 +70,47 @@ namespace NauPACS
 
                     if (reply != null)
                     {
-
                         if (xarxaDisponible == true && reply.Status.ToString() == "Success")
                         {
                             responPing = reply.Status == IPStatus.Success;
-                            Control_operario.Text = "Ping Correcto, tienes conexión";
+                            Control_operario.Text = "Se ha establecido la conexión";
+                            ConnectedPanel.BackColor = Color.Green;
                         }
                         else
                         {
-                            MessageBox.Show("Ping no contesta o Planeta no disponible");
+                            Control_operario.Text = "No se ha podido establecer la conexión. Verifique el planeta destino y su conectividad con la red.";
+                            DisconnectedPanel.BackColor = Color.Red;
                         }
                     }
                 }
 
                 catch (PingException)
                 {
-                    MessageBox.Show("Ping no contesta o Xarxa no disponible");
+                    Control_operario.Text = "No se ha podido obtener respuesta por parte del domino y/o dirección IP.";
                 }
             }
-            //Conexion cliente
-            try
-                {
-                    client = new TcpClient("10.0.2.36", 4500);
-                    Byte[] dades = Encoding.ASCII.GetBytes("XML");
-                    NetworkStream ns = client.GetStream();
-                    ns.Write(dades, 0, dades.Length);
 
-                    Control_operario.Text = "Se ha enviado un mensaje de texto";
-                }
-                catch
-                {
-                    MessageBox.Show("Planeta Desconectat");
-                }
+            //Conexion cliente //REVISARR
+
+            ObtainPlanetNetwork();
+
+            IPEndPoint endpoint = new IPEndPoint(PlanetIPAdress, PlanetPortNumber);
+
+            try
+            {
+                client.Connect(endpoint);
+
+                //Byte[] dades = Encoding.ASCII.GetBytes("XML");
+                //NetworkStream ns = client.GetStream();
+                //ns.Write(dades, 0, dades.Length);
+
+                //Control_operario.Text = "Se ha enviado un mensaje de texto";
             }
+            catch
+            {
+                MessageBox.Show("ERROR: No se ha podido conectar al planeta. Vuelva a intentarlo o revise su conexión.");
+            }
+        }
 
         private void btn_conectar_servidor_Click(object sender, EventArgs e)
         {
@@ -97,6 +118,7 @@ namespace NauPACS
             t2 = new Thread(Conectar_Servidor);
             t2.Start();
         }
+
         private void Conectar_Servidor()
         {
             try
@@ -115,7 +137,7 @@ namespace NauPACS
                         ns = client.GetStream();
                         byte[] buffer = new byte[1024];
                         ns.Read(buffer, 0, buffer.Length);
-                        data = System.Text.Encoding.ASCII.GetString(buffer, 0, buffer.Length);
+                        data = Encoding.ASCII.GetString(buffer, 0, buffer.Length);
                         Msj_Recibido.Text = ("IP: " + ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() + " ha enviat: " + data);
                     }
                 }
@@ -125,7 +147,6 @@ namespace NauPACS
             {
                 MessageBox.Show("ERROR");
             }
-
         }
 
         private void btn_desconectar_servidor_Click(object sender, EventArgs e)
@@ -137,26 +158,71 @@ namespace NauPACS
         private void btn_obtenir_codi_Click(object sender, EventArgs e)
         {
 
-            //String NomTaula = "Orders";
-            //String CampTaula = "idOrder";
+            txb_VCEncrypted.Clear();
 
+            //Obtener idPlanet de la nave correspondiente al ComboBox:
 
-            //DataTable infotaula = dts.Tables[0];
-
-            //string query = "select idPlanet from DeliveryData where idSpaceShip = (select idSpaceShip from SpaceShips where idSpaceShip = '" + dts.Tables[0] + "';";
-
- 
-            string query = "select idPlanet from DeliveryData where idSpaceShip = (select idSpaceShip from SpaceShips where CodeSpaceShip = (select CodeSpaceShipCategory from SpaceShipCategories where DescSpaceShipCategory = '" + cmb_Nau.SelectedItem + "'))";
+            string query = "select idPlanet from DeliveryData where idSpaceShip = (select idSpaceShip from SpaceShips where CodeSpaceShip = (select CodeSpaceShipCategory from SpaceShipCategories where DescSpaceShipCategory = '" + cmb_Nau.Text + "'))";
 
             DataSet dts = bbdd.PortarPerConsulta(query);
 
+            string planet_code = dts.Tables[0].Rows[0][0].ToString();
 
 
+            //Obtener clave pública:
+
+            query = "select XMLKey from PlanetKeys where idPlanet = '" + planet_code + "'";
+
+            dts = bbdd.PortarPerConsulta(query);
+
+            string PublicKey = dts.Tables[0].Rows[0][0].ToString();
+
+            
+            //Opción 2 - Guardar Clave a archivo XML:
+
+            //dts.WriteXml("Customer.xml", XmlWriteMode.WriteSchema);
+
+
+            //Obtener código de validación:
+
+            query = "select ValidationCode from InnerEncryption where idPlanet = '" + planet_code + "'";
+
+            dts = bbdd.PortarPerConsulta(query);
+
+            string ValidationCode = dts.Tables[0].Rows[0][0].ToString();
+
+
+            //Encriptar Código con Clave:
+
+            rsaEnc.FromXmlString(PublicKey);
+
+            UnicodeEncoding ByteConverter = new UnicodeEncoding();
+
+            byte[] dataToEncrypt = ByteConverter.GetBytes(ValidationCode);
+
+            EncryptedData =
+            RSAEncrypt(dataToEncrypt, rsaEnc.ExportParameters(false), false);
+
+            txb_VCEncrypted.Text = Encoding.Default.GetString(EncryptedData);
         }
 
         private void Nau_Load(object sender, EventArgs e)
         {
-            
+
+            //string query = "select DescSpaceShipCategory from SpaceShipCategories";
+
+            //inici = bbdd.PortarPerConsulta(query);
+
+
+            //string dsadad = inici.Tables[0].Rows[0].ToString();
+            //int Num_Tablas = inici.Tables.Count;
+
+            //for (int i=0; i < inici.Tables.Count; i++)
+            //{
+            //    cmb_Nau.Items.Add(inici.Tables[i]);
+            //}
+
+
             string query = "select * from SpaceShips SS, SpaceShipCategories SSC where SS.CodeSpaceShip = SSC.CodeSpaceShipCategory";
 
             inici = bbdd.PortarPerConsulta(query);
@@ -164,6 +230,73 @@ namespace NauPACS
             cmb_Nau.DataSource = inici.Tables[0];
             cmb_Nau.ValueMember = "idSpaceShip";
             cmb_Nau.DisplayMember = "DescSpaceShipCategory";
+        }
+
+
+
+        public byte[] RSAEncrypt(byte[] DataToEncrypt, RSAParameters RSAKeyInfo, bool DoOAEPPadding)
+
+        {
+            byte[] encryptedData;
+            using (rsaEnc)
+            {
+                rsaEnc.ImportParameters(RSAKeyInfo);
+                encryptedData = rsaEnc.Encrypt(DataToEncrypt, DoOAEPPadding);
+            }
+            return encryptedData;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ns = client.GetStream();
+
+            Byte[] dades = Encoding.ASCII.GetBytes(tbx_SendMessage.Text);
+            ns.Write(dades, 0, dades.Length);
+            MessageBox.Show("Mensaje enviado con éxito.");
+        }
+
+        private void btn_enviar_Click(object sender, EventArgs e)
+        {
+
+            //SIN ACABAR
+
+            //ObtainPlanetNetwork();
+
+            //Byte[] dades = Encoding.ASCII.GetBytes(tbx_SendMessage.Text);
+            //ns.Write(dades, 0, dades.Length);
+            //MessageBox.Show("Mensaje enviado con éxito.");
+        }
+
+
+        private void ObtainPlanetNetwork()
+        {
+            string query = "select idPlanet from DeliveryData where idSpaceShip = (select idSpaceShip from SpaceShips where CodeSpaceShip = (select CodeSpaceShipCategory from SpaceShipCategories where DescSpaceShipCategory = '" + cmb_Nau.Text + "'))";
+
+            DataSet dts = bbdd.PortarPerConsulta(query);
+
+            string IDPlanet = dts.Tables[0].Rows[0][0].ToString();
+
+            query = "select IPPlanet from Planets where IDPlanet = '" + IDPlanet + "'";
+
+            dts = bbdd.PortarPerConsulta(query);
+
+            string IPPlanet = dts.Tables[0].Rows[0][0].ToString();
+
+
+
+            query = "select PortPlanet from Planets where IDPlanet = '" + IDPlanet + "'";
+
+            dts = bbdd.PortarPerConsulta(query);
+
+            string PortPlanet = dts.Tables[0].Rows[0][0].ToString();
+
+
+            PlanetIPAdress = IPAddress.Parse(IPPlanet);
+
+            PlanetPortNumber = Int32.Parse(PortPlanet);
+
+
+
         }
 
 
