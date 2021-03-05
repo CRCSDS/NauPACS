@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.IO.Compression;
 
 namespace NauPACS
 {
@@ -33,7 +34,7 @@ namespace NauPACS
 
         byte[] EncryptedData;
         RSACryptoServiceProvider rsaEnc = new RSACryptoServiceProvider();
-        private Color Colors;
+
 
         IPAddress PlanetIPAdress;
 
@@ -58,7 +59,7 @@ namespace NauPACS
         private void Connectar()
         {
             ConnectedPanel.BackColor = Color.Gray;
-            DisconnectedPanel.BackColor = Color.Gray;
+            ConectplanetPanel.BackColor = Color.Gray;
 
             for (int i = 0; i < 11; i++)
             {
@@ -73,13 +74,13 @@ namespace NauPACS
                         if (xarxaDisponible == true && reply.Status.ToString() == "Success")
                         {
                             responPing = reply.Status == IPStatus.Success;
-                            Control_operario.Text = "Se ha establecido la conexión";
+                            Control_operario.Text = "Se ha establecido la conexión a internet";
                             ConnectedPanel.BackColor = Color.Green;
                         }
                         else
                         {
-                            Control_operario.Text = "No se ha podido establecer la conexión. Verifique el planeta destino y su conectividad con la red.";
-                            DisconnectedPanel.BackColor = Color.Red;
+                            Control_operario.Text = "No se ha podido establecer la conexión a internet. Verifique su conectividad con la red.";
+                            ConnectedPanel.BackColor = Color.Red;
                         }
                     }
                 }
@@ -99,6 +100,8 @@ namespace NauPACS
             try
             {
                 client.Connect(endpoint);
+                MessageBox.Show("Planeta encontrado! Listos para contactar");
+                ConectplanetPanel.BackColor = Color.Green;
 
                 //Byte[] dades = Encoding.ASCII.GetBytes("XML");
                 //NetworkStream ns = client.GetStream();
@@ -109,6 +112,7 @@ namespace NauPACS
             catch
             {
                 MessageBox.Show("ERROR: No se ha podido conectar al planeta. Vuelva a intentarlo o revise su conexión.");
+                ConectplanetPanel.BackColor = Color.Red;
             }
         }
 
@@ -246,26 +250,7 @@ namespace NauPACS
             return encryptedData;
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            ns = client.GetStream();
-
-            Byte[] dades = Encoding.ASCII.GetBytes(tbx_SendMessage.Text);
-            ns.Write(dades, 0, dades.Length);
-            MessageBox.Show("Mensaje enviado con éxito.");
-        }
-
-        private void btn_enviar_Click(object sender, EventArgs e)
-        {
-
-            //SIN ACABAR
-
-            //ObtainPlanetNetwork();
-
-            //Byte[] dades = Encoding.ASCII.GetBytes(tbx_SendMessage.Text);
-            //ns.Write(dades, 0, dades.Length);
-            //MessageBox.Show("Mensaje enviado con éxito.");
-        }
+     
 
 
         private void ObtainPlanetNetwork()
@@ -295,10 +280,46 @@ namespace NauPACS
 
             PlanetPortNumber = Int32.Parse(PortPlanet);
 
-
-
         }
 
+        private void btn_enviarMensaje_Click(object sender, EventArgs e)
+        {
+            ns = client.GetStream();
+
+
+            string query = "select idSpaceShip from SpaceShips where idSpaceShip = '" + cmb_Nau.SelectedItem + "'";
+
+            DataSet dts = bbdd.PortarPerConsulta(query);
+
+            string IdSpaceShip = dts.Tables[0].Rows[0][0].ToString();
+
+
+
+            query = "select idDeliveryData from DeliveryData DD, SpaceShips SS,  where DD.idSpaceShip = SS.'" + cmb_Nau.SelectedItem + "'";
+            dts = bbdd.PortarPerConsulta(query);
+
+            string idDelivery = dts.Tables[0].Rows[0][0].ToString();
+
+
+            Byte[] dades = Encoding.ASCII.GetBytes("ER"+IdSpaceShip+idDelivery);
+            ns.Write(dades, 0, dades.Length);
+            MessageBox.Show("Mensaje enviado con éxito.");
+        }
+
+        private void btn_enviarCV_Click(object sender, EventArgs e)
+        {
+            ns = client.GetStream();
+
+            Byte[] dades = Encoding.ASCII.GetBytes("VK"+ txb_VCEncrypted.Text);
+            ns.Write(dades, 0, dades.Length);
+            MessageBox.Show("Codi de validació de la nau encriptat enviat!");
+           
+        }
+
+        private void btn_tratarZip_Click(object sender, EventArgs e)
+        {
+            
+        }
 
         private void btn_desconectar_Click(object sender, EventArgs e)
         {

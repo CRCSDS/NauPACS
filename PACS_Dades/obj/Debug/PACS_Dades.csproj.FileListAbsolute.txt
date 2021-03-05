@@ -11,3 +11,10 @@ C:\Users\CR\Documents\GitHub\NauPACS\PACS_Dades\obj\Debug\PACS_Dades.csprojAssem
 C:\Users\CR\Documents\GitHub\NauPACS\PACS_Dades\obj\Debug\PACS_Dades.csproj.CoreCompileInputs.cache
 C:\Users\CR\Documents\GitHub\NauPACS\PACS_Dades\obj\Debug\PACS_Dades.dll
 C:\Users\CR\Documents\GitHub\NauPACS\PACS_Dades\obj\Debug\PACS_Dades.pdb
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\DLL\PACS_Dades.dll.config
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\DLL\PACS_Dades.dll
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\DLL\PACS_Dades.pdb
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\PACS_Dades\obj\Debug\PACS_Dades.csprojAssemblyReference.cache
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\PACS_Dades\obj\Debug\PACS_Dades.csproj.CoreCompileInputs.cache
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\PACS_Dades\obj\Debug\PACS_Dades.dll
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\PACS_Dades\obj\Debug\PACS_Dades.pdb

@@ -19,3 +19,14 @@ C:\Users\CR\Documents\GitHub\NauPACS\NauPACS\obj\Debug\NauPACS.csproj.CoreCompil
 C:\Users\CR\Documents\GitHub\NauPACS\NauPACS\obj\Debug\NauPACS.csproj.CopyComplete
 C:\Users\CR\Documents\GitHub\NauPACS\NauPACS\obj\Debug\NauPACS.exe
 C:\Users\CR\Documents\GitHub\NauPACS\NauPACS\obj\Debug\NauPACS.pdb
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\DLL\NauPACS.exe.config
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\DLL\NauPACS.exe
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\DLL\NauPACS.pdb
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\NauPACS\obj\Debug\NauPACS.csprojAssemblyReference.cache
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\NauPACS\obj\Debug\NauPACS.Nau.resources
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\NauPACS\obj\Debug\NauPACS.Properties.Resources.resources
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\NauPACS\obj\Debug\NauPACS.csproj.GenerateResource.cache
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\NauPACS\obj\Debug\NauPACS.csproj.CoreCompileInputs.cache
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\NauPACS\obj\Debug\NauPACS.csproj.CopyComplete
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\NauPACS\obj\Debug\NauPACS.exe
+C:\Users\rprod\OneDrive\Documentos\GitHub\NauPACS\NauPACS\obj\Debug\NauPACS.pdb
