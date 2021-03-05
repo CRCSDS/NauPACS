@@ -140,6 +140,8 @@ namespace PlanetaPACS
             if (!conectat)
             {
                 lb_Missatges.Items.Add("Servidor Conectat");
+                lb_Missatges.Items.Add("");
+                FinalListBox();
                 conectat = true;
                 servidor = true;
                 hilo = new Thread(function);
@@ -168,6 +170,8 @@ namespace PlanetaPACS
         private void btn_Desconectar_Click(object sender, EventArgs e)
         {
             lb_Missatges.Items.Add("Servidor Desconectat");
+            lb_Missatges.Items.Add("");
+            FinalListBox();
             conectat = false;
             if (hilo != null)
             {
@@ -188,11 +192,15 @@ namespace PlanetaPACS
         private void btn_Client_Click(object sender, EventArgs e)
         {
             lb_Missatges.Items.Add("Client Iniciat");
+            lb_Missatges.Items.Add("");
+            FinalListBox();
         }
 
         private void btn_DesconectarClient_Click(object sender, EventArgs e)
         {
             lb_Missatges.Items.Add("Client Desconectat");
+            lb_Missatges.Items.Add("");
+            FinalListBox();
         }
 
         private void btn_xifrat_Click(object sender, EventArgs e)
@@ -247,6 +255,33 @@ namespace PlanetaPACS
             lb_Missatges.Items.Add("Diccionari generat correctament");
         }
 
+        private void btn_ConfirmacioValidacio_Click(object sender, EventArgs e)
+        {
+            string missatge_validacio;
+
+            string CodeSpaceShip = "749435707149";
+            string CodeDelivery = "960095496495";
+            string query = "select * from DeliveryData DD, SpaceShips SS where DD.idSpaceShip = SS.idSpaceShip " +
+                            "and SS.CodeSpaceShip = "+ CodeSpaceShip +" and DD.CodeDelivery = " + CodeDelivery;
+
+            DataSet confirmacio = bbdd.PortarPerConsulta(query);
+
+            if (confirmacio.Tables[0].Rows.Count > 0)
+            {
+                missatge_validacio = "VR" + CodeSpaceShip + "VP";
+                lb_Missatges.Items.Add("VALIDACIÓ EN PROGRÉS:");
+                lb_Missatges.Items.Add(missatge_validacio);
+                lb_Missatges.Items.Add("");
+                FinalListBox();
+            }
+            else
+            {
+                missatge_validacio = "VR" + CodeSpaceShip + "AD";
+                lb_Missatges.Items.Add("ACCES DENEGAT:");
+                lb_Missatges.Items.Add(missatge_validacio);
+                FinalListBox();
+            }
+        }
         private string Portar_idPlanet()
         {
             string planeta = cmb_Planeta.Text;
@@ -256,6 +291,12 @@ namespace PlanetaPACS
             string idPlanet = dtsPlaneta.Tables[0].Rows[0]["idPlanet"].ToString();
 
             return idPlanet;
+        }
+
+        private void FinalListBox()
+        {
+            lb_Missatges.SelectedIndex = lb_Missatges.Items.Count - 1;
+            lb_Missatges.SelectedIndex = -1;
         }
     }
 }

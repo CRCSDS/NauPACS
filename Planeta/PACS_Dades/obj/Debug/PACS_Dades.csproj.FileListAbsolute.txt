@@ -11,3 +11,4 @@ C:\Users\Edu\Desktop\PlanetaPACS\PACS_Dades\obj\Debug\PACS_Dades.csprojAssemblyR
 C:\Users\Edu\Desktop\PlanetaPACS\PACS_Dades\obj\Debug\PACS_Dades.csproj.CoreCompileInputs.cache
 C:\Users\Edu\Desktop\PlanetaPACS\PACS_Dades\obj\Debug\PACS_Dades.dll
 C:\Users\Edu\Desktop\PlanetaPACS\PACS_Dades\obj\Debug\PACS_Dades.pdb
+C:\Users\reiva\Desktop\G3\PlanetaPACS\PACS_Dades\obj\Debug\PACS_Dades.csprojAssemblyReference.cache

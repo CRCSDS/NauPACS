@@ -37,9 +37,10 @@ namespace PlanetaPACS
             this.btn_Client = new System.Windows.Forms.Button();
             this.btn_DesconectarClient = new System.Windows.Forms.Button();
             this.lb_Missatges = new System.Windows.Forms.ListBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txb_Missatge = new System.Windows.Forms.TextBox();
             this.lbl_Missatge = new System.Windows.Forms.Label();
             this.btn_xifrat = new System.Windows.Forms.Button();
+            this.btn_ConfirmacioValidacio = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btn_codi
@@ -66,7 +67,7 @@ namespace PlanetaPACS
             // btn_clau
             // 
             this.btn_clau.Font = new System.Drawing.Font("Corbel", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_clau.Location = new System.Drawing.Point(320, 51);
+            this.btn_clau.Location = new System.Drawing.Point(330, 51);
             this.btn_clau.Name = "btn_clau";
             this.btn_clau.Size = new System.Drawing.Size(114, 64);
             this.btn_clau.TabIndex = 2;
@@ -76,8 +77,9 @@ namespace PlanetaPACS
             // 
             // btn_Servidor
             // 
+            this.btn_Servidor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_Servidor.Font = new System.Drawing.Font("Corbel", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_Servidor.Location = new System.Drawing.Point(827, 34);
+            this.btn_Servidor.Location = new System.Drawing.Point(544, 21);
             this.btn_Servidor.Name = "btn_Servidor";
             this.btn_Servidor.Size = new System.Drawing.Size(140, 85);
             this.btn_Servidor.TabIndex = 4;
@@ -87,8 +89,9 @@ namespace PlanetaPACS
             // 
             // btn_Desconectar
             // 
+            this.btn_Desconectar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_Desconectar.Font = new System.Drawing.Font("Corbel", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_Desconectar.Location = new System.Drawing.Point(827, 125);
+            this.btn_Desconectar.Location = new System.Drawing.Point(690, 21);
             this.btn_Desconectar.Name = "btn_Desconectar";
             this.btn_Desconectar.Size = new System.Drawing.Size(140, 85);
             this.btn_Desconectar.TabIndex = 5;
@@ -98,8 +101,9 @@ namespace PlanetaPACS
             // 
             // btn_Client
             // 
+            this.btn_Client.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_Client.Font = new System.Drawing.Font("Corbel", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_Client.Location = new System.Drawing.Point(827, 216);
+            this.btn_Client.Location = new System.Drawing.Point(544, 126);
             this.btn_Client.Name = "btn_Client";
             this.btn_Client.Size = new System.Drawing.Size(140, 85);
             this.btn_Client.TabIndex = 7;
@@ -109,8 +113,9 @@ namespace PlanetaPACS
             // 
             // btn_DesconectarClient
             // 
+            this.btn_DesconectarClient.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_DesconectarClient.Font = new System.Drawing.Font("Corbel", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_DesconectarClient.Location = new System.Drawing.Point(827, 307);
+            this.btn_DesconectarClient.Location = new System.Drawing.Point(690, 127);
             this.btn_DesconectarClient.Name = "btn_DesconectarClient";
             this.btn_DesconectarClient.Size = new System.Drawing.Size(140, 85);
             this.btn_DesconectarClient.TabIndex = 8;
@@ -121,27 +126,32 @@ namespace PlanetaPACS
             // lb_Missatges
             // 
             this.lb_Missatges.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lb_Missatges.BackColor = System.Drawing.Color.Black;
+            this.lb_Missatges.Font = new System.Drawing.Font("Consolas", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb_Missatges.ForeColor = System.Drawing.Color.Gold;
             this.lb_Missatges.FormattingEnabled = true;
-            this.lb_Missatges.ItemHeight = 16;
-            this.lb_Missatges.Location = new System.Drawing.Point(982, 34);
+            this.lb_Missatges.ItemHeight = 22;
+            this.lb_Missatges.Location = new System.Drawing.Point(840, 21);
             this.lb_Missatges.Name = "lb_Missatges";
-            this.lb_Missatges.Size = new System.Drawing.Size(400, 260);
+            this.lb_Missatges.Size = new System.Drawing.Size(536, 334);
             this.lb_Missatges.TabIndex = 9;
             // 
-            // textBox1
+            // txb_Missatge
             // 
-            this.textBox1.Location = new System.Drawing.Point(982, 331);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(400, 61);
-            this.textBox1.TabIndex = 10;
+            this.txb_Missatge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txb_Missatge.Location = new System.Drawing.Point(840, 402);
+            this.txb_Missatge.Multiline = true;
+            this.txb_Missatge.Name = "txb_Missatge";
+            this.txb_Missatge.Size = new System.Drawing.Size(536, 68);
+            this.txb_Missatge.TabIndex = 10;
             // 
             // lbl_Missatge
             // 
+            this.lbl_Missatge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_Missatge.AutoSize = true;
             this.lbl_Missatge.Font = new System.Drawing.Font("Corbel", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_Missatge.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.lbl_Missatge.Location = new System.Drawing.Point(978, 307);
+            this.lbl_Missatge.Location = new System.Drawing.Point(840, 378);
             this.lbl_Missatge.Name = "lbl_Missatge";
             this.lbl_Missatge.Size = new System.Drawing.Size(75, 21);
             this.lbl_Missatge.TabIndex = 11;
@@ -150,7 +160,7 @@ namespace PlanetaPACS
             // btn_xifrat
             // 
             this.btn_xifrat.Font = new System.Drawing.Font("Corbel", 10.8F);
-            this.btn_xifrat.Location = new System.Drawing.Point(200, 145);
+            this.btn_xifrat.Location = new System.Drawing.Point(200, 132);
             this.btn_xifrat.Name = "btn_xifrat";
             this.btn_xifrat.Size = new System.Drawing.Size(114, 65);
             this.btn_xifrat.TabIndex = 12;
@@ -158,16 +168,29 @@ namespace PlanetaPACS
             this.btn_xifrat.UseVisualStyleBackColor = true;
             this.btn_xifrat.Click += new System.EventHandler(this.btn_xifrat_Click);
             // 
+            // btn_ConfirmacioValidacio
+            // 
+            this.btn_ConfirmacioValidacio.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_ConfirmacioValidacio.Font = new System.Drawing.Font("Corbel", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_ConfirmacioValidacio.Location = new System.Drawing.Point(690, 233);
+            this.btn_ConfirmacioValidacio.Name = "btn_ConfirmacioValidacio";
+            this.btn_ConfirmacioValidacio.Size = new System.Drawing.Size(140, 85);
+            this.btn_ConfirmacioValidacio.TabIndex = 13;
+            this.btn_ConfirmacioValidacio.Text = "Confirmar Validació";
+            this.btn_ConfirmacioValidacio.UseVisualStyleBackColor = true;
+            this.btn_ConfirmacioValidacio.Click += new System.EventHandler(this.btn_ConfirmacioValidacio_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1412, 753);
+            this.ClientSize = new System.Drawing.Size(1404, 622);
+            this.Controls.Add(this.btn_ConfirmacioValidacio);
             this.Controls.Add(this.btn_xifrat);
             this.Controls.Add(this.lbl_Missatge);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txb_Missatge);
             this.Controls.Add(this.lb_Missatges);
             this.Controls.Add(this.btn_DesconectarClient);
             this.Controls.Add(this.btn_Client);
@@ -196,9 +219,10 @@ namespace PlanetaPACS
         private System.Windows.Forms.Button btn_Client;
         private System.Windows.Forms.Button btn_DesconectarClient;
         private System.Windows.Forms.ListBox lb_Missatges;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txb_Missatge;
         private System.Windows.Forms.Label lbl_Missatge;
         private System.Windows.Forms.Button btn_xifrat;
+        private System.Windows.Forms.Button btn_ConfirmacioValidacio;
     }
 }
 
