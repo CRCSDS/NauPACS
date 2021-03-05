@@ -8,9 +8,11 @@ namespace PACS_Dades
         private SqlConnection conn;
         private string cnx;
 
-        private void Connectar()
+        public void Connectar()
         {
-            cnx = "Data Source=den1.mssql8.gear.host;Initial Catalog=pacs;Persist Security Info=True;User ID=pacs;Password=contra123@";
+            //cnx = "Data Source=den1.mssql8.gear.host;Initial Catalog=pacs;Persist Security Info=True;User ID=pacs;Password=contra123@";
+            //Ruben 
+            cnx = "Data Source = den1.mssql8.gear.host; Initial Catalog = pacs; Persist Security Info = True; User ID = pacs; Password = contra123@";
             conn = new SqlConnection(cnx);
         }
 

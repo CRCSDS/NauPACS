@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.IO.Compression;
+using System.Data.SqlClient;
 
 namespace NauPACS
 {
@@ -32,6 +33,7 @@ namespace NauPACS
         Dades bbdd = new Dades();
         DataSet inici;
 
+
         byte[] EncryptedData;
         RSACryptoServiceProvider rsaEnc = new RSACryptoServiceProvider();
 
@@ -41,7 +43,6 @@ namespace NauPACS
         //IPAddress address = IPAddress.Parse("10.0.2.45");
 
         Int32 PlanetPortNumber;
-
 
 
         public Nau()
@@ -227,13 +228,15 @@ namespace NauPACS
             //}
 
 
-            string query = "select * from SpaceShips SS, SpaceShipCategories SSC where SS.CodeSpaceShip = SSC.CodeSpaceShipCategory";
+            string query = "select * from SpaceShips";
 
             inici = bbdd.PortarPerConsulta(query);
 
             cmb_Nau.DataSource = inici.Tables[0];
             cmb_Nau.ValueMember = "idSpaceShip";
-            cmb_Nau.DisplayMember = "DescSpaceShipCategory";
+            cmb_Nau.DisplayMember = "CodeSpaceShip";
+            cmb_Nau.SelectedIndex = 0;
+
         }
 
 
@@ -281,24 +284,19 @@ namespace NauPACS
             PlanetPortNumber = Int32.Parse(PortPlanet);
 
         }
+        
 
         private void btn_enviarMensaje_Click(object sender, EventArgs e)
         {
+           
+
             ns = client.GetStream();
 
+            string IdSpaceShip = cmb_Nau.SelectedItem.ToString();
 
-            string query = "select idSpaceShip from SpaceShips where idSpaceShip = '" + cmb_Nau.SelectedItem + "'";
+            //FALTA
+            string idDelivery = "";
 
-            DataSet dts = bbdd.PortarPerConsulta(query);
-
-            string IdSpaceShip = dts.Tables[0].Rows[0][0].ToString();
-
-
-
-            query = "select idDeliveryData from DeliveryData DD, SpaceShips SS,  where DD.idSpaceShip = SS.'" + cmb_Nau.SelectedItem + "'";
-            dts = bbdd.PortarPerConsulta(query);
-
-            string idDelivery = dts.Tables[0].Rows[0][0].ToString();
 
 
             Byte[] dades = Encoding.ASCII.GetBytes("ER"+IdSpaceShip+idDelivery);
@@ -319,6 +317,21 @@ namespace NauPACS
         private void btn_tratarZip_Click(object sender, EventArgs e)
         {
             
+        }
+
+        private void cmb_Nau_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                string query1 = "select * from DeliveryData where idSpaceShip = '" + cmb_Nau.SelectedValue + "'";
+                DataSet dts_delivery = bbdd.PortarPerConsulta(query1);
+                dtg_Delivery.DataSource = dts_delivery.Tables[0];
+                dtg_Delivery.Columns["idDeliveryData"].Visible = false;
+            }
+            catch
+            {
+           
+            }
         }
 
         private void btn_desconectar_Click(object sender, EventArgs e)

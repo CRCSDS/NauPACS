@@ -53,6 +53,11 @@
     <Compile Include="Nau.Designer.cs">
       <DependentUpon>Nau.cs</DependentUpon>
     </Compile>
+    <Compile Include="pacsDataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>pacsDataSet1.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Nau.resx">
@@ -67,6 +72,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="pacsDataSet1.xsc">
+      <DependentUpon>pacsDataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="pacsDataSet1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>pacsDataSet1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="pacsDataSet1.xss">
+      <DependentUpon>pacsDataSet1.xsd</DependentUpon>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

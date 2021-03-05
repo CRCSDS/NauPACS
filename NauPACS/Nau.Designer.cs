@@ -29,6 +29,8 @@ namespace NauPACS
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.btn_obtenir_codi = new System.Windows.Forms.Button();
             this.btn_conectar = new System.Windows.Forms.Button();
             this.btn_enviarCV = new System.Windows.Forms.Button();
@@ -49,6 +51,12 @@ namespace NauPACS
             this.tbx_Fichero = new System.Windows.Forms.TextBox();
             this.lbl4 = new System.Windows.Forms.Label();
             this.btn_tratarZip = new System.Windows.Forms.Button();
+            this.dtg_Delivery = new System.Windows.Forms.DataGridView();
+            this.pacsDataSet = new NauPACS.pacsDataSet();
+            this.pacsDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.dtg_Delivery)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pacsDataSet)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pacsDataSetBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // btn_obtenir_codi
@@ -143,6 +151,7 @@ namespace NauPACS
             this.cmb_Nau.Name = "cmb_Nau";
             this.cmb_Nau.Size = new System.Drawing.Size(191, 28);
             this.cmb_Nau.TabIndex = 8;
+            this.cmb_Nau.SelectedIndexChanged += new System.EventHandler(this.cmb_Nau_SelectedIndexChanged);
             // 
             // txb_VCEncrypted
             // 
@@ -244,11 +253,37 @@ namespace NauPACS
             this.btn_tratarZip.UseVisualStyleBackColor = true;
             this.btn_tratarZip.Click += new System.EventHandler(this.btn_tratarZip_Click);
             // 
+            // dtg_Delivery
+            // 
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
+            this.dtg_Delivery.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.dtg_Delivery.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dtg_Delivery.Location = new System.Drawing.Point(386, 502);
+            this.dtg_Delivery.Name = "dtg_Delivery";
+            this.dtg_Delivery.RowHeadersWidth = 62;
+            this.dtg_Delivery.RowTemplate.Height = 28;
+            this.dtg_Delivery.Size = new System.Drawing.Size(709, 136);
+            this.dtg_Delivery.TabIndex = 21;
+            // 
+            // pacsDataSet
+            // 
+            this.pacsDataSet.DataSetName = "pacsDataSet";
+            this.pacsDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // pacsDataSetBindingSource
+            // 
+            this.pacsDataSetBindingSource.DataSource = this.pacsDataSet;
+            this.pacsDataSetBindingSource.Position = 0;
+            // 
             // Nau
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(900, 562);
+            this.ClientSize = new System.Drawing.Size(1136, 723);
+            this.Controls.Add(this.dtg_Delivery);
             this.Controls.Add(this.btn_tratarZip);
             this.Controls.Add(this.lbl4);
             this.Controls.Add(this.tbx_Fichero);
@@ -274,6 +309,9 @@ namespace NauPACS
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Nau";
             this.Load += new System.EventHandler(this.Nau_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dtg_Delivery)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pacsDataSet)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pacsDataSetBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -301,6 +339,9 @@ namespace NauPACS
         private System.Windows.Forms.TextBox tbx_Fichero;
         private System.Windows.Forms.Label lbl4;
         private System.Windows.Forms.Button btn_tratarZip;
+        private System.Windows.Forms.DataGridView dtg_Delivery;
+        private pacsDataSet pacsDataSet;
+        private System.Windows.Forms.BindingSource pacsDataSetBindingSource;
     }
 }
 
