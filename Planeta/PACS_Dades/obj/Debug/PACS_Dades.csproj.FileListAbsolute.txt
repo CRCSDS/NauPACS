@@ -1,0 +1,14 @@
+C:\Users\reiva\Desktop\G3\PlanetaPACS\PACS_Dades\bin\Debug\PACS_Dades.dll.config
+C:\Users\reiva\Desktop\G3\PlanetaPACS\PACS_Dades\bin\Debug\PACS_Dades.dll
+C:\Users\reiva\Desktop\G3\PlanetaPACS\PACS_Dades\bin\Debug\PACS_Dades.pdb
+C:\Users\reiva\Desktop\G3\PlanetaPACS\PACS_Dades\obj\Debug\PACS_Dades.csproj.CoreCompileInputs.cache
+C:\Users\reiva\Desktop\G3\PlanetaPACS\PACS_Dades\obj\Debug\PACS_Dades.dll
+C:\Users\reiva\Desktop\G3\PlanetaPACS\PACS_Dades\obj\Debug\PACS_Dades.pdb
+C:\Users\Edu\Desktop\PlanetaPACS\PACS_Dades\bin\Debug\PACS_Dades.dll.config
+C:\Users\Edu\Desktop\PlanetaPACS\PACS_Dades\bin\Debug\PACS_Dades.dll
+C:\Users\Edu\Desktop\PlanetaPACS\PACS_Dades\bin\Debug\PACS_Dades.pdb
+C:\Users\Edu\Desktop\PlanetaPACS\PACS_Dades\obj\Debug\PACS_Dades.csprojAssemblyReference.cache
+C:\Users\Edu\Desktop\PlanetaPACS\PACS_Dades\obj\Debug\PACS_Dades.csproj.CoreCompileInputs.cache
+C:\Users\Edu\Desktop\PlanetaPACS\PACS_Dades\obj\Debug\PACS_Dades.dll
+C:\Users\Edu\Desktop\PlanetaPACS\PACS_Dades\obj\Debug\PACS_Dades.pdb
+C:\Users\reiva\Desktop\G3\PlanetaPACS\PACS_Dades\obj\Debug\PACS_Dades.csprojAssemblyReference.cache
