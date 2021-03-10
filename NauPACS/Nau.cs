@@ -49,7 +49,8 @@ namespace NauPACS
 
         IPEndPoint endpoint;
 
-
+        string idDelivery;
+        string tipo_mensaje, tipo_acceso;
 
         public Nau()
         {
@@ -107,6 +108,7 @@ namespace NauPACS
                 client.Connect(endpoint);
                 MessageBox.Show("Planeta encontrado! Listos para contactar");
                 ConectplanetPanel.BackColor = Color.Green;
+                Control_operario_planeta.Text = "Establecida";
 
                 //Byte[] dades = Encoding.ASCII.GetBytes("XML");
                 //NetworkStream ns = client.GetStream();
@@ -116,7 +118,7 @@ namespace NauPACS
             }
             catch
             {
-                MessageBox.Show("ERROR: No se ha podido conectar al planeta. Vuelva a intentarlo o revise su conexión.");
+                Control_operario_planeta.Text = "No se ha podido conectar al planeta";
                 ConectplanetPanel.BackColor = Color.Red;
             }
         }
@@ -127,6 +129,8 @@ namespace NauPACS
             t2 = new Thread(Conectar_Servidor);
             t2.Start();
         }
+
+        int Estado = 0;
 
         private void Conectar_Servidor()
         {
@@ -147,7 +151,54 @@ namespace NauPACS
                         byte[] buffer = new byte[1024];
                         ns.Read(buffer, 0, buffer.Length);
                         data = Encoding.ASCII.GetString(buffer, 0, buffer.Length);
-                        Msj_Recibido.Text = ("IP: " + ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString() + " ha enviat: " + data);
+                        Msj_Recibido.Text = data;
+                        tipo_mensaje = data.Substring(0, 2);
+                        tipo_acceso = data.Substring(14,2);
+
+
+                        switch (tipo_mensaje) { 
+                       
+                            case "VR":
+
+                                //SIGUE EL PROGRAMA
+
+                                if (tipo_acceso == "VP")
+                                {
+                                    try
+                                    {
+                                        Obtener_codi_validacio();
+                                        Estado++;
+                                        
+                                    }
+                                    catch
+                                    {
+                                        MessageBox.Show("No se ha subministrado el codigo de validación");
+                                        Estado = 0;
+                                    }
+                                } else if (tipo_acceso == "VP" && Estado == 1)
+                                {
+                                    Estado++;
+                                }
+                                else if(tipo_acceso == "VP" && Estado == 2)
+                                {
+                                    Estado++;
+                                    //FICHEROS
+                                }
+                                else if (tipo_acceso == "VP" && Estado == 3)
+                                {
+                                    MessageBox.Show("ACCÉS PERMÉS");
+                                }
+                                else
+                                {
+                                    Listener.Stop();
+                                    t2.Abort();
+                                    Estado = 0;
+                                }
+
+                                break;
+
+                           
+                        }
                     }
                 }
             }
@@ -158,15 +209,18 @@ namespace NauPACS
             }
         }
 
+
+
+        //Threat Desconectar Server
         private void btn_desconectar_servidor_Click(object sender, EventArgs e)
         {
             t2.Abort();
             Listener.Stop();
         }
 
-        private void btn_obtenir_codi_Click(object sender, EventArgs e)
-        {
 
+        private void Obtener_codi_validacio()
+        {
             txb_VCEncrypted.Clear();
 
             //Obtener idPlanet de la nave correspondiente al ComboBox:
@@ -186,7 +240,7 @@ namespace NauPACS
 
             string PublicKey = dts.Tables[0].Rows[0][0].ToString();
 
-            
+
             //Opción 2 - Guardar Clave a archivo XML:
 
             //dts.WriteXml("Customer.xml", XmlWriteMode.WriteSchema);
@@ -221,8 +275,6 @@ namespace NauPACS
             txb_VCEncrypted.Text = ByteConverter.GetString(elementencriptat);
 
         }
-
-
 
         private void Nau_Load(object sender, EventArgs e)
         {
@@ -305,20 +357,20 @@ namespace NauPACS
         private void btn_enviarMensaje_Click(object sender, EventArgs e)
         {
            
-
             ns = client.GetStream();
 
-            string IdSpaceShip = cmb_Nau.SelectedItem.ToString();
-
-            //FALTA
-            string idDelivery = "";
-
-
-
+            string IdSpaceShip = cmb_Nau.Text;
+            idDelivery = dtg_Delivery.Rows[0].Cells["CodeDelivery"].Value.ToString();
 
             Byte[] dades = Encoding.ASCII.GetBytes("ER"+IdSpaceShip+idDelivery);
             ns.Write(dades, 0, dades.Length);
             MessageBox.Show("Mensaje enviado con éxito.");
+
+            //ns.Flush();
+            //ns.Dispose();
+            //ns.Close();
+            //client.Close();
+            //client.Dispose();
         }
 
         private void btn_enviarCV_Click(object sender, EventArgs e)
@@ -326,29 +378,32 @@ namespace NauPACS
 
             //Conectarse como cliente hacia el planeta:
 
-            endpoint = ObtainPlanetNetwork();
+            //try { 
 
-            client.Connect(endpoint);
+            //endpoint = ObtainPlanetNetwork();
+
+            //client.Connect(endpoint);
+
 
             //Enviar CV a través del network stream:
 
             ns = client.GetStream();
 
-            Byte[] dades = Encoding.ASCII.GetBytes("VK");
+                Byte[] dades = Encoding.ASCII.GetBytes("VK");
 
-            ns.Write(dades, 0, dades.Length);
+                ns.Write(dades, 0, dades.Length);
 
-            dades = elementencriptat;
+                dades = elementencriptat;
 
-            ns.Write(dades, 0, dades.Length);
+                ns.Write(dades, 0, dades.Length);
 
-            MessageBox.Show("Codi de validació de la nau encriptat enviat!");
+                MessageBox.Show("Codi de validació de la nau encriptat enviat!");
+            //}
+            //catch 
+            //{
+                
+            //}
            
-        }
-
-        private void btn_tratarZip_Click(object sender, EventArgs e)
-        {
-            
         }
 
         private void cmb_Nau_SelectedIndexChanged(object sender, EventArgs e)
@@ -365,6 +420,7 @@ namespace NauPACS
            
             }
         }
+
 
         private void btn_desconectar_Click(object sender, EventArgs e)
         {
