@@ -31,9 +31,7 @@ namespace NauPACS
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.btn_conectar = new System.Windows.Forms.Button();
             this.btn_enviarCV = new System.Windows.Forms.Button();
-            this.btn_desconectar = new System.Windows.Forms.Button();
             this.btn_conectar_servidor = new System.Windows.Forms.Button();
             this.btn_desconectar_servidor = new System.Windows.Forms.Button();
             this.Msj_Recibido = new System.Windows.Forms.TextBox();
@@ -59,17 +57,6 @@ namespace NauPACS
             ((System.ComponentModel.ISupportInitialize)(this.pacsDataSetBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
-            // btn_conectar
-            // 
-            this.btn_conectar.Location = new System.Drawing.Point(439, 60);
-            this.btn_conectar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btn_conectar.Name = "btn_conectar";
-            this.btn_conectar.Size = new System.Drawing.Size(140, 50);
-            this.btn_conectar.TabIndex = 1;
-            this.btn_conectar.Text = "Conectar cliente";
-            this.btn_conectar.UseVisualStyleBackColor = true;
-            this.btn_conectar.Click += new System.EventHandler(this.btn_conectar_Click);
-            // 
             // btn_enviarCV
             // 
             this.btn_enviarCV.Location = new System.Drawing.Point(102, 165);
@@ -80,17 +67,6 @@ namespace NauPACS
             this.btn_enviarCV.Text = "Enviar CV";
             this.btn_enviarCV.UseVisualStyleBackColor = true;
             this.btn_enviarCV.Click += new System.EventHandler(this.btn_enviarCV_Click);
-            // 
-            // btn_desconectar
-            // 
-            this.btn_desconectar.Location = new System.Drawing.Point(584, 60);
-            this.btn_desconectar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btn_desconectar.Name = "btn_desconectar";
-            this.btn_desconectar.Size = new System.Drawing.Size(182, 50);
-            this.btn_desconectar.TabIndex = 3;
-            this.btn_desconectar.Text = "Desconectar cliente";
-            this.btn_desconectar.UseVisualStyleBackColor = true;
-            this.btn_desconectar.Click += new System.EventHandler(this.btn_desconectar_Click);
             // 
             // btn_conectar_servidor
             // 
@@ -215,6 +191,7 @@ namespace NauPACS
             this.btn_enviarFichero.TabIndex = 17;
             this.btn_enviarFichero.Text = "Enviar Fichero";
             this.btn_enviarFichero.UseVisualStyleBackColor = true;
+            this.btn_enviarFichero.Click += new System.EventHandler(this.btn_enviarFichero_Click);
             // 
             // tbx_Fichero
             // 
@@ -300,9 +277,7 @@ namespace NauPACS
             this.Controls.Add(this.Msj_Recibido);
             this.Controls.Add(this.btn_desconectar_servidor);
             this.Controls.Add(this.btn_conectar_servidor);
-            this.Controls.Add(this.btn_desconectar);
             this.Controls.Add(this.btn_enviarCV);
-            this.Controls.Add(this.btn_conectar);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Nau";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -317,9 +292,7 @@ namespace NauPACS
         }
 
         #endregion
-        private System.Windows.Forms.Button btn_conectar;
         private System.Windows.Forms.Button btn_enviarCV;
-        private System.Windows.Forms.Button btn_desconectar;
         private System.Windows.Forms.Button btn_conectar_servidor;
         private System.Windows.Forms.Button btn_desconectar_servidor;
         private System.Windows.Forms.TextBox Msj_Recibido;
