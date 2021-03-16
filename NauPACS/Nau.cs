@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
@@ -54,6 +55,7 @@ namespace NauPACS
 
         string idDelivery;
         string tipo_mensaje, tipo_acceso;
+        string idPlanet;
         int Estado = 0;
 
         string filepathZIP = Application.StartupPath + "PACS.zip";
@@ -217,16 +219,58 @@ namespace NauPACS
 
         private void tractar_fitxer()
         {
-            string query = "select * from InnerEncryptionData IED, InnerEncryption IE where "; //Query a InnerEncryptionData para obtener la ID y los valores
-
-            Dictionary<string, string> Diccionario;
+            /* string query = "select * from InnerEncryptionData IED, InnerEncryption IE where "; *///Query a InnerEncryptionData para obtener la ID y los valores
 
 
 
+            //Crear diccionario para referenciar con los numeros que devuelven los ficheros:
+
+            string query = "select D.idPlanet from DeliveryData D, Planets P where D.idSpaceShip = (select idSpaceShip from SpaceShips where CodeSpaceShip = '" + cmb_Nau.Text + "') AND D.idPlanet = P.idPlanet;";
+            DataSet dts = bbdd.PortarPerConsulta(query);
+            idPlanet = dts.Tables[0].Rows[0][0].ToString();
+
+
+            Dictionary<string, string> Diccionario = new Dictionary<string, string>();
+
+            Diccionario = new Dictionary<string, string>();
+
+             query = "SELECT * FROM innerEncryptionData ied, innerEncryption ie " +
+                           "WHERE ied.idInnerEncryption = ie.idInnerEncryption AND idPlanet = '" + idPlanet  + "'";
+             dts = bbdd.PortarPerConsulta(query);
+
+            for (int i = 0; i < 26; i++)
+            {
+                string Word = dts.Tables[0].Rows[i]["Word"].ToString();
+                string Numbers = dts.Tables[0].Rows[i]["Numbers"].ToString();
+                Diccionario.Add(Word, Numbers);
+            }
+
+
+            //Leer ficheros y guardar las "keys" equivalentes en un nuevo archvio:
+            int x = 0;
+            string line;
+           
+                                             
+            for (int i = 0; i < 3; i++)
+            {
+                System.IO.StreamReader file = new System.IO.StreamReader(filepath+"PACS"+i+".txt");
+
+                while ((line = file.ReadLine()) != null)
+                {
+                    char[] buffer = new char[3];
+                    file.Read(buffer, x, 3);
+
+
+                    var myKey = Diccionario.FirstOrDefault(y => y.Value == buffer[x]).Key; //Uno es un string, el otro un char (mirar como resolverlo)
+
+                    x = x + 3;
+
+                }
 
 
 
 
+                }
         }
 
 
@@ -264,7 +308,7 @@ namespace NauPACS
 
                                 //SIGUE EL PROGRAMA
 
-                                if (tipo_acceso == "VP")
+                                if (tipo_acceso == "VP" && Estado == 0)
                                 {
                                     try
                                     {
@@ -307,7 +351,6 @@ namespace NauPACS
                     }
                 }
             }
-
             catch (SocketException)
             {
                 MessageBox.Show("ERROR");
@@ -357,7 +400,6 @@ namespace NauPACS
             byte[] dataToEncrypt = ByteConverter.GetBytes(ValidationCode);
             elementencriptat = rsaEnc.Encrypt(dataToEncrypt, false);
             txb_VCEncrypted.Text = ByteConverter.GetString(elementencriptat);
-
         }
 
         private void Nau_Load(object sender, EventArgs e)
@@ -375,7 +417,6 @@ namespace NauPACS
 
 
         public byte[] RSAEncrypt(byte[] DataToEncrypt, RSAParameters RSAKeyInfo, bool DoOAEPPadding)
-
         {
             byte[] encryptedData;
             using (rsaEnc)
@@ -401,7 +442,6 @@ namespace NauPACS
             IPEndPoint endpoint = new IPEndPoint(PlanetIPAdress, PlanetPortNumber);
 
             return endpoint;
-
         }
 
         private void btn_enviarFichero_Click(object sender, EventArgs e)
@@ -436,7 +476,6 @@ namespace NauPACS
             {
                 MessageBox.Show("Error de conexión, vuelva a intentarlo");
             }
-
         }
 
         private void btn_enviarCV_Click(object sender, EventArgs e)
@@ -446,7 +485,6 @@ namespace NauPACS
 
             try
             {
-
                 endpoint = ObtainPlanetNetwork();
 
                 //Se declara un cliente para preguntar al planeta:
@@ -474,9 +512,7 @@ namespace NauPACS
             catch
             {
                 MessageBox.Show("Error a l´enviar el CV");
-
             }
-
         }
 
         private void cmb_Nau_SelectedIndexChanged(object sender, EventArgs e)
@@ -492,7 +528,6 @@ namespace NauPACS
             {
 
             }
-
         }
     }
 }
