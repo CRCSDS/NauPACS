@@ -21,9 +21,7 @@ namespace NauPACS
 
         //Variables globales:
 
-
         string Status = string.Empty;
-
 
         //Strings de mensaje:
         string msj_ErrorConexion = "Sin conexión.";
@@ -62,8 +60,8 @@ namespace NauPACS
 
         //Ficheros:
         private const int BufferSize = 1024;
-        string filepathZIP = Application.StartupPath + "\\PACS.zip";
-        string filepath = Application.StartupPath;
+        string filepathZIP = Application.StartupPath + "\\PACS_Files\\PACS.zip";
+        string filepath = Application.StartupPath + "\\PACS_Files";
 
         // Arranque de fases del programa:
         string tipo_mensaje, tipo_acceso;
@@ -80,6 +78,7 @@ namespace NauPACS
         {
             ConnectedPanel.BackColor = Color.Gray;
             ConectplanetPanel.BackColor = Color.Gray;
+
 
             for (int i = 0; i < 11; i++)
             {
@@ -150,6 +149,12 @@ namespace NauPACS
 
         public void RecibirArchivos()
         {
+
+            bool ZipFileExists = false;
+
+            string[] ExistingFiles;
+
+
             //Obtener Puerto del planeta correspondiente a la nave seleccionada:
 
             string query = "select P.PortPlanet1 from Planets P, DeliveryData D where D.idSpaceShip = (select idSpaceShip from SpaceShips where CodeSpaceShip = '" + cmb_Nau.Text + "') AND D.idPlanet = P.idPlanet;";
@@ -174,6 +179,7 @@ namespace NauPACS
             byte[] RecData = new byte[BufferSize];
             int RecBytes;
 
+
             //Loop infinito (while)
 
             for (; ; )
@@ -197,8 +203,24 @@ namespace NauPACS
 
                         if (result == DialogResult.Yes)
                         {
+
+                            ZipFileExists = File.Exists(filepathZIP);
+
+                            if (ZipFileExists) //Si el archivo comprimido existe, eliminalo junto a sus elementos extraidos en la carpeta seleccionada.
+                            {
+                                File.Delete(filepathZIP);
+
+                                ExistingFiles = Directory.GetFiles(filepath, "*PACS *.txt");
+
+                                foreach (string file in ExistingFiles)
+                                {
+                                    File.Delete(file);
+                                }
+                            }
+
                             int totalrecbytes = 0;
                             FileStream Fs = new FileStream(filepathZIP, FileMode.OpenOrCreate, FileAccess.Write);
+
                             while ((RecBytes = netstream.Read(RecData, 0, RecData.Length)) > 0)
                             {
                                 Fs.Write(RecData, 0, RecBytes);
@@ -229,7 +251,6 @@ namespace NauPACS
 
         private void tractar_fitxer()
         {
-            /* string query = "select * from InnerEncryptionData IED, InnerEncryption IE where "; *///Query a InnerEncryptionData para obtener la ID y los valores
 
             //Crear diccionario para referenciar con los numeros que devuelven los ficheros:
 
@@ -301,7 +322,7 @@ namespace NauPACS
                 Listener.Start();
                 iss = true;
 
-                while (iss) 
+                while (iss)
                 {
                     //MENSAJES PARA EL OPERARIO
 
@@ -355,7 +376,6 @@ namespace NauPACS
                                 }
 
                                 break;
-
                         }
                     }
                 }
@@ -389,6 +409,8 @@ namespace NauPACS
             DataSet dts = bbdd.PortarPerConsulta(query);
 
             string planet_code = dts.Tables[0].Rows[0][0].ToString();
+
+
             //Obtener clave pública y CV:
 
             query = "select * from PlanetKeys P, InnerEncryption IE where P.idPlanet = IE.idPlanet AND P.idPlanet = " + planet_code + "";
@@ -425,7 +447,6 @@ namespace NauPACS
         }
 
 
-
         public byte[] RSAEncrypt(byte[] DataToEncrypt, RSAParameters RSAKeyInfo, bool DoOAEPPadding)
         {
             byte[] encryptedData;
@@ -436,7 +457,6 @@ namespace NauPACS
             }
             return encryptedData;
         }
-
 
 
         private IPEndPoint ObtainPlanetNetwork()
@@ -454,11 +474,12 @@ namespace NauPACS
             return endpoint;
         }
 
+
         private void btn_enviarFichero_Click(object sender, EventArgs e)
         {
             if (Estado >= 1)
             {
-                //Enviar fichero tractado
+                //Enviar fichero tractado:
 
                 string queryIP = "select IPPlanet, PortPlanet1 from Planets where idPlanet = 23";
                 DataSet dtsConnectivitat = bbdd.PortarPerConsulta(queryIP);

@@ -31,6 +31,7 @@ namespace NauPACS
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Nau));
             this.btn_enviarCV = new System.Windows.Forms.Button();
             this.btn_conectar_servidor = new System.Windows.Forms.Button();
             this.btn_desconectar_servidor = new System.Windows.Forms.Button();
@@ -197,7 +198,7 @@ namespace NauPACS
             // 
             this.tbx_Fichero.Location = new System.Drawing.Point(297, 336);
             this.tbx_Fichero.Name = "tbx_Fichero";
-            this.tbx_Fichero.Size = new System.Drawing.Size(162, 22);
+            this.tbx_Fichero.Size = new System.Drawing.Size(169, 22);
             this.tbx_Fichero.TabIndex = 18;
             // 
             // lbl4
@@ -266,7 +267,8 @@ namespace NauPACS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1010, 578);
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.ClientSize = new System.Drawing.Size(1026, 578);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.Control_operario_planeta);
             this.Controls.Add(this.label4);
@@ -287,6 +289,7 @@ namespace NauPACS
             this.Controls.Add(this.btn_desconectar_servidor);
             this.Controls.Add(this.btn_conectar_servidor);
             this.Controls.Add(this.btn_enviarCV);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Nau";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Nau";
