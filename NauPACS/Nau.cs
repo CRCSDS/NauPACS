@@ -19,54 +19,62 @@ namespace NauPACS
     public partial class Nau : Form
     {
 
-        //2 CLIENTS UNO PARA TEXTOS Y OTRO PARA ARCHIVOS
-        private const int BufferSize = 1024;
+        //Variables globales:
+
+
         string Status = string.Empty;
 
+
+        //Strings de mensaje:
+        string msj_ErrorConexion = "Sin conexión.";
+        string msj_ConexionEstablecida = "Establecida.";
+
+        //Clientes y Servidores:
         TcpClient client = new TcpClient();
         TcpClient server = new TcpClient();
-        Thread T,t2;
+
+        //Hilos:
+        Thread T, t2;
+
+        //Ping y acceso a internet:
         Boolean xarxaDisponible;
         Ping myPing = new Ping();
         bool responPing = false;
 
+        //Network Streams, conexiones TCP y IPs:
         NetworkStream ns;
         TcpListener Listener;
-        Boolean iss = false;
+        IPAddress PlanetIPAdress;
+        IPEndPoint endpoint;
         String data = null;
 
+        //BBDD:
         Dades bbdd = new Dades();
         DataSet inici;
+        Int32 PlanetPortNumber, PortPlanet1;
+        string idPlanet;
+        string idDelivery;
 
-
+        //Encriptación por RSA:
         byte[] EncryptedData;
+        byte[] elementencriptat;
         RSACryptoServiceProvider rsaEnc = new RSACryptoServiceProvider();
 
-
-        IPAddress PlanetIPAdress;
-
-
-        Int32 PlanetPortNumber,PortPlanet1;
-
-
-        byte[] elementencriptat;
-
-        IPEndPoint endpoint;
-
-        string idDelivery;
-        string tipo_mensaje, tipo_acceso;
-        string idPlanet;
-        int Estado = 0;
-
-        string filepathZIP = Application.StartupPath + "PACS.zip";
+        //Ficheros:
+        private const int BufferSize = 1024;
+        string filepathZIP = Application.StartupPath + "\\PACS.zip";
         string filepath = Application.StartupPath;
+
+        // Arranque de fases del programa:
+        string tipo_mensaje, tipo_acceso;
+        int Estado = 0;
+        Boolean iss = false;
 
 
         public Nau()
         {
             InitializeComponent();
         }
-
 
         private void Connectar()
         {
@@ -75,8 +83,7 @@ namespace NauPACS
 
             for (int i = 0; i < 11; i++)
             {
-                //PING
-                try
+                try //Ping
                 {
                     xarxaDisponible = NetworkInterface.GetIsNetworkAvailable();
                     PingReply reply = myPing.Send("8.8.8.8", 1000);
@@ -86,40 +93,52 @@ namespace NauPACS
                         if (xarxaDisponible == true && reply.Status.ToString() == "Success")
                         {
                             responPing = reply.Status == IPStatus.Success;
-                            Control_operario.Text = "Establecida";
+                            Control_operario.Text = msj_ConexionEstablecida;
                             ConnectedPanel.BackColor = Color.Green;
                         }
                         else
                         {
-                            Control_operario.Text = "No se ha podido establecer la conexión a internet. Verifique su conectividad con la red.";
+                            Control_operario.Text = "No se ha podido obtener respuesta por parte del domino o dirección IP.";
                             ConnectedPanel.BackColor = Color.Red;
                         }
                     }
                 }
 
-                catch (PingException)
+                catch (PingException pe)
                 {
-                    Control_operario.Text = "No se ha podido obtener respuesta por parte del domino y/o dirección IP.";
+                    MessageBox.Show(pe.ToString());
+                    Control_operario.Text = msj_ErrorConexion;
                 }
             }
 
-            //Conexion cliente contra planeta
+
+            //Conexion cliente contra planeta:
 
             endpoint = ObtainPlanetNetwork();
 
             try
             {
                 client.Connect(endpoint);
-                MessageBox.Show("Planeta encontrado! Listos para contactar.");
+                MessageBox.Show("Planeta encontrado. Listos para contactar.");
                 ConectplanetPanel.BackColor = Color.Green;
-                Control_operario_planeta.Text = "Establecida";
+                Control_operario_planeta.Text = msj_ConexionEstablecida;
+
+                btn_conectar_servidor.Enabled = true;
+                btn_conectar_servidor.ForeColor = System.Drawing.Color.Black;
+
+                btn_desconectar_servidor.Enabled = true;
+                btn_desconectar_servidor.ForeColor = System.Drawing.Color.Black;
+
             }
             catch
             {
-                Control_operario_planeta.Text = "No se ha podido conectar al planeta";
+                MessageBox.Show("No se ha podido conectar al planeta. Revise que el planeta destino coincida con su nave.");
+                Control_operario_planeta.Text = msj_ErrorConexion;
                 ConectplanetPanel.BackColor = Color.Red;
             }
         }
+
+
 
         private void btn_conectar_servidor_Click(object sender, EventArgs e)
         {
@@ -129,7 +148,7 @@ namespace NauPACS
         }
 
 
-        public void RecivirArchivos()
+        public void RecibirArchivos()
         {
             //Obtener Puerto del planeta correspondiente a la nave seleccionada:
 
@@ -138,7 +157,6 @@ namespace NauPACS
             DataSet dts = bbdd.PortarPerConsulta(query);
 
             PortPlanet1 = Int32.Parse(dts.Tables[0].Rows[0][0].ToString());
-
 
 
             TcpListener Listener = null;
@@ -170,7 +188,6 @@ namespace NauPACS
                     MessageBoxButtons buttons = MessageBoxButtons.YesNo;
                     DialogResult result;
 
-
                     if (Listener.Pending())
                     {
                         Archivos = Listener.AcceptTcpClient();
@@ -178,38 +195,31 @@ namespace NauPACS
                         Status = "Connected to a client\n";
                         result = MessageBox.Show(message, caption, buttons);
 
-                        if (result == System.Windows.Forms.DialogResult.Yes)
+                        if (result == DialogResult.Yes)
                         {
-                            string SaveFileName = string.Empty;
-                            SaveFileDialog DialogSave = new SaveFileDialog();
-                            DialogSave.Filter = "All files (*.*)|*.*";
-                            DialogSave.RestoreDirectory = true;
-                            DialogSave.Title = "Where do you want to save the file?";
-                            DialogSave.InitialDirectory = @"C:/";
-                            if (DialogSave.ShowDialog() == DialogResult.OK)
-                                SaveFileName = DialogSave.FileName;
-                            if (SaveFileName != string.Empty)
+                            int totalrecbytes = 0;
+                            FileStream Fs = new FileStream(filepathZIP, FileMode.OpenOrCreate, FileAccess.Write);
+                            while ((RecBytes = netstream.Read(RecData, 0, RecData.Length)) > 0)
                             {
-                                int totalrecbytes = 0;
-                                FileStream Fs = new FileStream(SaveFileName, FileMode.OpenOrCreate, FileAccess.Write);
-                                while ((RecBytes = netstream.Read(RecData, 0, RecData.Length)) > 0)
-                                {
-                                    Fs.Write(RecData, 0, RecBytes);
-                                    totalrecbytes += RecBytes;
-                                }
-                                Fs.Close();
+                                Fs.Write(RecData, 0, RecBytes);
+                                totalrecbytes += RecBytes;
                             }
+                            Fs.Close();
+
                             netstream.Close();
                             Archivos.Close();
 
                             //Descomprimir
                             ZipFile.ExtractToDirectory(filepathZIP, filepath);
+
+                            //Tratar fichero:
+                            tractar_fitxer();
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    MessageBox.Show("Error: " + ex.Message);
                     //netstream.Close();
                 }
             }
@@ -220,8 +230,6 @@ namespace NauPACS
         private void tractar_fitxer()
         {
             /* string query = "select * from InnerEncryptionData IED, InnerEncryption IE where "; *///Query a InnerEncryptionData para obtener la ID y los valores
-
-
 
             //Crear diccionario para referenciar con los numeros que devuelven los ficheros:
 
@@ -234,9 +242,10 @@ namespace NauPACS
 
             Diccionario = new Dictionary<string, string>();
 
-             query = "SELECT * FROM innerEncryptionData ied, innerEncryption ie " +
-                           "WHERE ied.idInnerEncryption = ie.idInnerEncryption AND idPlanet = '" + idPlanet  + "'";
-             dts = bbdd.PortarPerConsulta(query);
+            query = "SELECT * FROM innerEncryptionData ied, innerEncryption ie " +
+                          "WHERE ied.idInnerEncryption = ie.idInnerEncryption AND idPlanet = '" + idPlanet + "'";
+
+            dts = bbdd.PortarPerConsulta(query);
 
             for (int i = 0; i < 26; i++)
             {
@@ -246,34 +255,41 @@ namespace NauPACS
             }
 
 
-            //Leer ficheros y guardar las "keys" equivalentes en un nuevo archvio:
-            int x = 0;
+            //Leer ficheros y guardar las "keys" equivalentes en un nuevo archivo:
+
             string line;
-           
-                                             
-            for (int i = 0; i < 3; i++)
+
+            FileStream fs = File.Create(filepath + "\\PACCSOL.txt");
+
+            StreamWriter writer = new StreamWriter(filepath + "\\PACSSOL.txt");
+
+
+            for (int i = 1; i < 4; i++)
             {
-                System.IO.StreamReader file = new System.IO.StreamReader(filepath+"PACS"+i+".txt");
 
-                while ((line = file.ReadLine()) != null)
+                int x = 0;
+
+                StreamReader File = new StreamReader(filepath + "\\PACS" + i + ".txt");
+
+                string FileData = File.ReadToEnd();
+
+
+                for (x = 0; x < FileData.Length; x = x + 3)
                 {
-                    char[] buffer = new char[3];
-                    file.Read(buffer, x, 3);
+                    string FileDigits = FileData.Substring(x, 3);
 
+                    var myKey = Diccionario.FirstOrDefault(y => y.Value == FileDigits).Key;
 
-                    var myKey = Diccionario.FirstOrDefault(y => y.Value == buffer[x]).Key; //Uno es un string, el otro un char (mirar como resolverlo)
-
-                    x = x + 3;
+                    writer.Write(myKey);
 
                 }
 
+                File.Close();
 
+            }
 
-
-                }
+            writer.Close();
         }
-
-
 
 
 
@@ -285,7 +301,7 @@ namespace NauPACS
                 Listener.Start();
                 iss = true;
 
-                while (iss)
+                while (iss) 
                 {
                     //MENSAJES PARA EL OPERARIO
 
@@ -300,10 +316,8 @@ namespace NauPACS
                         tipo_mensaje = data.Substring(0, 2);
                         tipo_acceso = data.Substring(14, 2);
 
-
                         switch (tipo_mensaje)
                         {
-
                             case "VR":
 
                                 //SIGUE EL PROGRAMA
@@ -314,11 +328,10 @@ namespace NauPACS
                                     {
                                         Obtener_codi_validacio();
                                         Estado++;
-
                                     }
                                     catch
                                     {
-                                        MessageBox.Show("No se ha subministrado el codigo de validación");
+                                        MessageBox.Show("No se ha subministrado el codigo de validación.");
                                         Estado = 0;
                                     }
                                 }
@@ -326,13 +339,9 @@ namespace NauPACS
                                 {
                                     Estado++;
 
-                                    ThreadStart Ts = new ThreadStart(RecivirArchivos);
+                                    ThreadStart Ts = new ThreadStart(RecibirArchivos);
                                     T = new Thread(Ts);
                                     T.Start();
-                                    
-                                    
-
-
                                 }
                                 else if (tipo_acceso == "VP" && Estado == 2)
                                 {
@@ -382,13 +391,13 @@ namespace NauPACS
             string planet_code = dts.Tables[0].Rows[0][0].ToString();
             //Obtener clave pública y CV:
 
-            query = "Select P.XMLKey, IE.ValidationCode from PlanetKeys P, InnerEncryption IE where P.idPlanet = " + planet_code + "";
+            query = "select * from PlanetKeys P, InnerEncryption IE where P.idPlanet = IE.idPlanet AND P.idPlanet = " + planet_code + "";
 
             dts = bbdd.PortarPerConsulta(query);
 
-            string PublicKey = dts.Tables[0].Rows[0][0].ToString();
+            string PublicKey = dts.Tables[0].Rows[0]["XMLKey"].ToString();
 
-            string ValidationCode = dts.Tables[0].Rows[0][1].ToString();
+            string ValidationCode = dts.Tables[0].Rows[0]["ValidationCode"].ToString();
 
 
             //Encriptar Código con Clave:
@@ -401,6 +410,7 @@ namespace NauPACS
             elementencriptat = rsaEnc.Encrypt(dataToEncrypt, false);
             txb_VCEncrypted.Text = ByteConverter.GetString(elementencriptat);
         }
+
 
         private void Nau_Load(object sender, EventArgs e)
         {
@@ -446,25 +456,51 @@ namespace NauPACS
 
         private void btn_enviarFichero_Click(object sender, EventArgs e)
         {
-            if(Estado >= 1)
+            if (Estado >= 1)
             {
-                //Tratar fichero y enviarlo a planeta
+                //Enviar fichero tractado
+
+                string queryIP = "select IPPlanet, PortPlanet1 from Planets where idPlanet = 23";
+                DataSet dtsConnectivitat = bbdd.PortarPerConsulta(queryIP);
+
+                string Ip = dtsConnectivitat.Tables[0].Rows[0]["IPPlanet"].ToString();
+                string Port = dtsConnectivitat.Tables[0].Rows[0]["PortPlanet1"].ToString();
+
+                try
+                {
+                    TcpClient client = new TcpClient(Ip, int.Parse(Port));
+
+                    NetworkStream ns = client.GetStream();
+                    byte[] arxiu = File.ReadAllBytes(Application.StartupPath + "\\PACSSOL.txt");
+                    ns.Write(arxiu, 0, arxiu.Length);
+
+                    client.Dispose();
+                    client.Close();
+                    ns.Close();
+                    ns.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+
             }
         }
 
-        private void btn_enviarMensaje_Click(object sender, EventArgs e)
+
+        private void btn_PlanetConnect_Click(object sender, EventArgs e)
         {
             try
             {
                 Connectar();
                 ns = client.GetStream();
 
-                string IdSpaceShip = cmb_Nau.Text;
+                string CodeSpaceShip = cmb_Nau.Text;
                 idDelivery = dtg_Delivery.Rows[0].Cells["CodeDelivery"].Value.ToString();
 
-                Byte[] dades = Encoding.ASCII.GetBytes("ER" + IdSpaceShip + idDelivery);
+                Byte[] dades = Encoding.ASCII.GetBytes("ER" + CodeSpaceShip + idDelivery);
                 ns.Write(dades, 0, dades.Length);
-                MessageBox.Show("Mensaje enviado con éxito.");
+                MessageBox.Show("Su mensaje se ha enviado con éxito.");
 
                 ns.Flush();
                 ns.Dispose();
@@ -474,9 +510,10 @@ namespace NauPACS
             }
             catch
             {
-                MessageBox.Show("Error de conexión, vuelva a intentarlo");
+                MessageBox.Show("Su conexión con el planeta ha expirado.");
             }
         }
+
 
         private void btn_enviarCV_Click(object sender, EventArgs e)
         {
@@ -524,9 +561,9 @@ namespace NauPACS
                 dtg_Delivery.DataSource = dts_delivery.Tables[0];
                 dtg_Delivery.Columns["idDeliveryData"].Visible = false;
             }
-            catch
+            catch (Exception ex)
             {
-
+                MessageBox.Show(ex.ToString());
             }
         }
     }
