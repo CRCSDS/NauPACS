@@ -94,6 +94,8 @@ namespace NauPACS
                             responPing = reply.Status == IPStatus.Success;
                             Control_operario.Text = msj_ConexionEstablecida;
                             ConnectedPanel.BackColor = Color.Green;
+                            //ConnectedPanel.BackgroundImage = Bitmap(Application.StartupPath + "\\..\\");
+
                         }
                         else
                         {
@@ -203,6 +205,7 @@ namespace NauPACS
 
                         if (result == DialogResult.Yes)
                         {
+                            Directory.CreateDirectory(filepath);
 
                             ZipFileExists = File.Exists(filepathZIP);
 
@@ -210,7 +213,7 @@ namespace NauPACS
                             {
                                 File.Delete(filepathZIP);
 
-                                ExistingFiles = Directory.GetFiles(filepath, "*PACS *.txt");
+                                ExistingFiles = Directory.GetFiles(filepath, "PACS*.txt");
 
                                 foreach (string file in ExistingFiles)
                                 {
@@ -277,8 +280,6 @@ namespace NauPACS
 
 
             //Leer ficheros y guardar las "keys" equivalentes en un nuevo archivo:
-
-            string line;
 
             FileStream fs = File.Create(filepath + "\\PACCSOL.txt");
 
@@ -492,7 +493,7 @@ namespace NauPACS
                     TcpClient client = new TcpClient(Ip, int.Parse(Port));
 
                     NetworkStream ns = client.GetStream();
-                    byte[] arxiu = File.ReadAllBytes(Application.StartupPath + "\\PACSSOL.txt");
+                    byte[] arxiu = File.ReadAllBytes(filepath + "\\PACSSOL.txt");
                     ns.Write(arxiu, 0, arxiu.Length);
 
                     client.Dispose();
@@ -507,7 +508,6 @@ namespace NauPACS
 
             }
         }
-
 
         private void btn_PlanetConnect_Click(object sender, EventArgs e)
         {
@@ -577,14 +577,14 @@ namespace NauPACS
         {
             try
             {
-                string query1 = "select * from DeliveryData where idSpaceShip = '" + cmb_Nau.SelectedValue + "'";
+                //string query1 = "select * from DeliveryData where idSpaceShip = (select idSpaceShip from SpaceShips where CodeSpaceShip = '" + cmb_Nau.SelectedValue + "');";
+                string query1 = "select * from DeliveryData where idSpaceShip = '" + cmb_Nau.SelectedValue + "';";
                 DataSet dts_delivery = bbdd.PortarPerConsulta(query1);
                 dtg_Delivery.DataSource = dts_delivery.Tables[0];
                 dtg_Delivery.Columns["idDeliveryData"].Visible = false;
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show(ex.ToString());
             }
         }
     }
