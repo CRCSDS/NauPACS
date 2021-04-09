@@ -7,7 +7,6 @@ C:\Users\rprod\OneDrive\Escritorio\NauPACS\PACS_Dades\obj\Debug\PACS_Dades.pdb
 C:\Users\CR\Documents\GitHub\NauPACS\DLL\PACS_Dades.dll.config
 C:\Users\CR\Documents\GitHub\NauPACS\DLL\PACS_Dades.dll
 C:\Users\CR\Documents\GitHub\NauPACS\DLL\PACS_Dades.pdb
-C:\Users\CR\Documents\GitHub\NauPACS\PACS_Dades\obj\Debug\PACS_Dades.csprojAssemblyReference.cache
 C:\Users\CR\Documents\GitHub\NauPACS\PACS_Dades\obj\Debug\PACS_Dades.csproj.CoreCompileInputs.cache
 C:\Users\CR\Documents\GitHub\NauPACS\PACS_Dades\obj\Debug\PACS_Dades.dll
 C:\Users\CR\Documents\GitHub\NauPACS\PACS_Dades\obj\Debug\PACS_Dades.pdb

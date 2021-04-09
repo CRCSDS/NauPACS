@@ -63,6 +63,46 @@ namespace NauPACS.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap P1 {
+            get {
+                object obj = ResourceManager.GetObject("P1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SpaceBackGround {
+            get {
+                object obj = ResourceManager.GetObject("SpaceBackGround", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SpaceShip_DefaultButtonº {
+            get {
+                object obj = ResourceManager.GetObject("SpaceShip_DefaultButtonº", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap spaceship_hud_rs2 {
+            get {
+                object obj = ResourceManager.GetObject("spaceship_hud_rs2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SpaceShip_HUDv1 {
             get {
                 object obj = ResourceManager.GetObject("SpaceShip_HUDv1", resourceCulture);

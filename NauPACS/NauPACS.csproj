@@ -113,5 +113,17 @@
   <ItemGroup>
     <None Include="Resources\SpaceShip_HUDv1.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\spaceship_hud_rs2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SpaceShip_DefaultButtonº.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SpaceBackGround1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\P11.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -25,7 +25,7 @@ namespace NauPACS
 
         //Strings de mensaje:
         string msj_ErrorConexion = "Sin conexión.";
-        string msj_ConexionEstablecida = "Establecida.";
+        string msj_ConexionEstablecida = "Conexión establecida con éxito.";
 
         //Clientes y Servidores:
         TcpClient client = new TcpClient();
@@ -76,9 +76,6 @@ namespace NauPACS
 
         private void Connectar()
         {
-            ConnectedPanel.BackColor = Color.Gray;
-            ConectplanetPanel.BackColor = Color.Gray;
-
 
             for (int i = 0; i < 11; i++)
             {
@@ -92,15 +89,24 @@ namespace NauPACS
                         if (xarxaDisponible == true && reply.Status.ToString() == "Success")
                         {
                             responPing = reply.Status == IPStatus.Success;
-                            Control_operario.Text = msj_ConexionEstablecida;
-                            ConnectedPanel.BackColor = Color.Green;
-                            //ConnectedPanel.BackgroundImage = Bitmap(Application.StartupPath + "\\..\\");
+
+                            //Control_operario.Text = msj_ConexionEstablecida;
+
+                            //ConnectedPanel.BackColor = Color.Green;
+
+                            ConnectedPB.ImageLocation = Application.StartupPath + "\\Assets\\SpaceShip_GreenButtonºrs.png";
+                            ConnectedPB.SizeMode = PictureBoxSizeMode.StretchImage;
 
                         }
                         else
                         {
-                            Control_operario.Text = "No se ha podido obtener respuesta por parte del domino o dirección IP.";
-                            ConnectedPanel.BackColor = Color.Red;
+                            ConnectedPB.ImageLocation = Application.StartupPath + "\\Assets\\SpaceShip_RedButtonºrs.png";
+                            ConnectedPB.SizeMode = PictureBoxSizeMode.StretchImage;
+
+                            //Control_operario.Text = "No se ha podido obtener respuesta por parte del domino o dirección IP.";
+                            ConsoleBox1.Items.Add("No se ha podido obtener respuesta por parte del domino o dirección IP.");
+                            ConsoleBox1.Items.Add(" ");
+
                         }
                     }
                 }
@@ -108,8 +114,18 @@ namespace NauPACS
                 catch (PingException pe)
                 {
                     MessageBox.Show(pe.ToString());
-                    Control_operario.Text = msj_ErrorConexion;
+
+                    //Control_operario.Text = msj_ErrorConexion;
+                    ConsoleBox1.Items.Add(msj_ErrorConexion);
+                    ConsoleBox1.Items.Add(" ");
                 }
+            }
+
+
+            if (responPing) //Si por lo menos UNO de los pings responde:
+            {
+                ConsoleBox1.Items.Add("Acceso a internet aprobado.");
+                ConsoleBox1.Items.Add(" ");
             }
 
 
@@ -120,9 +136,17 @@ namespace NauPACS
             try
             {
                 client.Connect(endpoint);
-                MessageBox.Show("Planeta encontrado. Listos para contactar.");
-                ConectplanetPanel.BackColor = Color.Green;
-                Control_operario_planeta.Text = msj_ConexionEstablecida;
+
+                //MessageBox.Show("Planeta encontrado. Listos para contactar.");
+                ConsoleBox1.Items.Add("Planeta encontrado con éxtio, se ha establecido conexión con el servidor. Inicio de fase de comunicación.");
+                ConsoleBox1.Items.Add(" ");
+
+                ConnectToPlanetPB.ImageLocation = Application.StartupPath + "\\Assets\\SpaceShip_GreenButtonºrs.png";
+                ConnectedPB.SizeMode = PictureBoxSizeMode.StretchImage;
+
+                ConsoleBox1.Items.Add(msj_ConexionEstablecida);
+                ConsoleBox1.Items.Add(" ");
+                //Control_operario_planeta.Text = msj_ConexionEstablecida;
 
                 btn_conectar_servidor.Enabled = true;
                 btn_conectar_servidor.ForeColor = System.Drawing.Color.Black;
@@ -130,12 +154,26 @@ namespace NauPACS
                 btn_desconectar_servidor.Enabled = true;
                 btn_desconectar_servidor.ForeColor = System.Drawing.Color.Black;
 
+                ConsoleBox1.Items.Add(" ");
+                ConsoleBox2.Items.Add("Planet Net Info:");
+                ConsoleBox1.Items.Add(" ");
+                ConsoleBox2.Items.Add("'" + endpoint.ToString() + "'");
+
             }
             catch
             {
-                MessageBox.Show("No se ha podido conectar al planeta. Revise que el planeta destino coincida con su nave.");
+                //MessageBox.Show("No se ha podido conectar al planeta. Revise que el planeta destino coincida con su nave.");
+                ConsoleBox1.Items.Add("No se ha podido conectar al planeta. Revise que el planeta destino coincida con su nave.");
+                ConsoleBox1.Items.Add(" ");
+
                 Control_operario_planeta.Text = msj_ErrorConexion;
-                ConectplanetPanel.BackColor = Color.Red;
+                ConsoleBox1.Items.Add(msj_ErrorConexion);
+                ConsoleBox1.Items.Add(" ");
+
+                ConnectToPlanetPB.ImageLocation = Application.StartupPath + "\\Assets\\SpaceShip_RedButtonºrs.png";
+                ConnectedPB.SizeMode = PictureBoxSizeMode.StretchImage;
+
+                ConsoleBox2.Items.Clear();
             }
         }
 
@@ -175,6 +213,7 @@ namespace NauPACS
             }
             catch (Exception ex)
             {
+                ConsoleBox1.Items.Add("ERROR: " + ex.Message);
                 Console.WriteLine(ex.Message);
             }
 
@@ -191,8 +230,8 @@ namespace NauPACS
                 Status = string.Empty;
                 try
                 {
-                    string message = "Accept the Incoming File ";
-                    string caption = "Incoming Connection";
+                    string message = "Desea aceptar y recibir los archivos del planeta correspondiente?";
+                    string caption = "Petición de inserción de archivos";
                     MessageBoxButtons buttons = MessageBoxButtons.YesNo;
                     DialogResult result;
 
@@ -234,17 +273,23 @@ namespace NauPACS
                             netstream.Close();
                             Archivos.Close();
 
+                            ConsoleBox1.Items.Add("Alternando archivos, espere porfavor...");
+
                             //Descomprimir
                             ZipFile.ExtractToDirectory(filepathZIP, filepath);
 
                             //Tratar fichero:
                             tractar_fitxer();
+
+                            ConsoleBox1.Items.Add("Archivos tratados correctamente. Presione 'Enviar Ficheros' para mandarlos hacia el planeta.");
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error: " + ex.Message);
+                    //MessageBox.Show("Error: " + ex.Message);
+                    ConsoleBox1.Items.Add("Error: " + ex.Message);
+
                     //netstream.Close();
                 }
             }
@@ -317,6 +362,9 @@ namespace NauPACS
 
         private void Conectar_Servidor()
         {
+
+            ConsoleBox1.Items.Clear();
+
             try
             {
                 Listener = new TcpListener(IPAddress.Any, 4500);
@@ -334,7 +382,6 @@ namespace NauPACS
                         byte[] buffer = new byte[1024];
                         ns.Read(buffer, 0, buffer.Length);
                         data = Encoding.ASCII.GetString(buffer, 0, buffer.Length);
-                        Msj_Recibido.Text = data;
                         tipo_mensaje = data.Substring(0, 2);
                         tipo_acceso = data.Substring(14, 2);
 
@@ -353,7 +400,8 @@ namespace NauPACS
                                     }
                                     catch
                                     {
-                                        MessageBox.Show("No se ha subministrado el codigo de validación.");
+                                        //MessageBox.Show("No se ha subministrado el codigo de validación.");
+                                        ConsoleBox1.Items.Add("ERROR: No se ha podido subministrar el codigo de validación.");
                                         Estado = 0;
                                     }
                                 }
@@ -364,10 +412,15 @@ namespace NauPACS
                                     ThreadStart Ts = new ThreadStart(RecibirArchivos);
                                     T = new Thread(Ts);
                                     T.Start();
+
                                 }
                                 else if (tipo_acceso == "VP" && Estado == 2)
                                 {
-                                    MessageBox.Show("ACCÉS PERMÉS");
+                                    AccessPB.ImageLocation = Application.StartupPath + "\\Assets\\SpaceShip_GreenButtonºrs.png";
+                                    ConnectedPB.SizeMode = PictureBoxSizeMode.StretchImage;
+
+                                    //MessageBox.Show("ACCESO PERMITIDO");
+                                    ConsoleBox1.Items.Add("Planeta X: ACCESO PERMITIDO");
                                 }
                                 else
                                 {
@@ -381,9 +434,11 @@ namespace NauPACS
                     }
                 }
             }
-            catch (SocketException)
+            catch (SocketException se)
             {
-                MessageBox.Show("ERROR");
+                //MessageBox.Show("ERROR: " + se.Message);
+                ConsoleBox1.Items.Add("ERROR: " + se.Message);
+
             }
         }
 
@@ -391,11 +446,18 @@ namespace NauPACS
         //Threat Desconectar Server
         private void btn_desconectar_servidor_Click(object sender, EventArgs e)
         {
+            ConsoleBox1.Items.Add("Apagando servidor, porfavor espere...");
+
             t2.Abort();
             Listener.Stop();
             client.Close();
             client.Dispose();
             T.Abort();
+
+            ConsoleBox1.Items.Clear();
+            ConsoleBox2.Items.Clear();
+
+            ConsoleBox1.Items.Add("El servidor se ha apagado correctamente.");
         }
 
 
@@ -431,7 +493,11 @@ namespace NauPACS
 
             byte[] dataToEncrypt = ByteConverter.GetBytes(ValidationCode);
             elementencriptat = rsaEnc.Encrypt(dataToEncrypt, false);
+
             txb_VCEncrypted.Text = ByteConverter.GetString(elementencriptat);
+
+            ConsoleBox2.Items.Add("CV: ");
+            ConsoleBox2.Items.Add(ByteConverter.GetString(elementencriptat));
         }
 
 
@@ -500,17 +566,69 @@ namespace NauPACS
                     client.Close();
                     ns.Close();
                     ns.Dispose();
+
+                    ConsoleBox1.Items.Add("Archivos alternos enviados al planeta.");
+                    ConsoleBox1.Items.Add(" ");
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.ToString());
+                    //MessageBox.Show(ex.ToString());
+                    ConsoleBox1.Items.Add("ERROR: " + ex.ToString());
+                    ConsoleBox1.Items.Add(" ");
                 }
 
             }
         }
 
+        private void ConsoleBox1_Click(object sender, EventArgs e)
+        {
+            if (ConsoleBox1.Height > 143 && ConsoleBox1.Width > 205)
+            {
+                ConsoleBox1.Dock = DockStyle.None;
+                ConsoleBox1.Height = 108;
+                ConsoleBox1.Width = 154;
+                ConsoleBox1.Location = new Point(350, 633);
+                ConsoleBox1.Font = new Font("Microsoft Sans Serif", 6);
+            }
+            else
+            {
+                ConsoleBox1.Dock = DockStyle.Fill;
+                ConsoleBox1.BringToFront();
+                ConsoleBox1.Font = new Font("Microsoft Sans Serif", 18);
+            }
+        }
+
+        private void ConsoleBox2_Click(object sender, EventArgs e)
+        {
+            if (ConsoleBox2.Height > 143 && ConsoleBox2.Width > 205)
+            {
+                ConsoleBox2.Dock = DockStyle.None;
+                ConsoleBox2.Height = 108;
+                ConsoleBox2.Width = 161;
+                ConsoleBox2.Location = new Point(1014, 630);
+                ConsoleBox2.Font = new Font("Microsoft Sans Serif", 6);
+            }
+            else
+            {
+                ConsoleBox2.Dock = DockStyle.Fill;
+                ConsoleBox2.BringToFront();
+                ConsoleBox2.Font = new Font("Microsoft Sans Serif", 18);
+            }
+        }
+
         private void btn_PlanetConnect_Click(object sender, EventArgs e)
         {
+
+            ConsoleBox1.Items.Clear();
+            ConsoleBox2.Items.Clear();
+
+            ConnectedPB.ImageLocation = Application.StartupPath + "\\Assets\\SpaceShip_DefaultButtonº.png";
+            ConnectedPB.SizeMode = PictureBoxSizeMode.StretchImage;
+
+            ConsoleBox1.Items.Add(" ");
+            ConsoleBox1.Items.Add("Iniciando conexión...");
+            ConsoleBox1.Items.Add(" ");
+
             try
             {
                 Connectar();
@@ -521,7 +639,12 @@ namespace NauPACS
 
                 Byte[] dades = Encoding.ASCII.GetBytes("ER" + CodeSpaceShip + idDelivery);
                 ns.Write(dades, 0, dades.Length);
-                MessageBox.Show("Su mensaje se ha enviado con éxito.");
+
+                SkyBackGround.BackgroundImage = Properties.Resources.P1;
+                SkyBackGround.BackgroundImageLayout = ImageLayout.Stretch;
+
+                ConsoleBox1.Items.Add("Se ha enviado una petición de acceso al planeta.");
+                ConsoleBox1.Items.Add(" ");
 
                 ns.Flush();
                 ns.Dispose();
@@ -531,7 +654,12 @@ namespace NauPACS
             }
             catch
             {
-                MessageBox.Show("Su conexión con el planeta ha expirado.");
+                SkyBackGround.BackgroundImage = Properties.Resources.SpaceBackGround;
+                SkyBackGround.BackgroundImageLayout = ImageLayout.Stretch;
+
+                ConsoleBox1.Items.Add("Su conexión con el planeta ha expirado.");
+                ConsoleBox1.Items.Add(" ");
+                ConsoleBox1.Items.Add("----------------------------------------");
             }
         }
 
@@ -563,13 +691,15 @@ namespace NauPACS
 
                 ns.Write(dades, 0, dades.Length);
 
-                MessageBox.Show("Codi de validació de la nau encriptat enviat!");
+                //MessageBox.Show("Codigo de validación encriptado enviado!");
+                ConsoleBox1.Items.Add("Codigo de validación encriptado (CV) enviado.");
 
                 Nouclient.Close();
             }
             catch
             {
-                MessageBox.Show("Error a l´enviar el CV");
+                MessageBox.Show("Error al enviar código de validación.");
+                ConsoleBox1.Items.Add("ERROR: Problema al enviar código de validación al planeta.");
             }
         }
 
