@@ -18,56 +18,62 @@ namespace NauPACS
 {
     public partial class Nau : Form
     {
-
         //Variables globales:
 
-        string Status = string.Empty;
+        private string Status = string.Empty;
 
         //Strings de mensaje:
-        string msj_ErrorConexion = "Sin conexión.";
-        string msj_ConexionEstablecida = "Conexión establecida con éxito.";
+        private string msj_ErrorConexion = "Sin conexión.";
+
+        private string msj_ConexionEstablecida = "Conexión establecida con éxito.";
 
         //Clientes y Servidores:
-        TcpClient client = new TcpClient();
-        TcpClient server = new TcpClient();
+        private TcpClient client = new TcpClient();
+
+        private TcpClient server = new TcpClient();
 
         //Hilos:
-        Thread T, t2;
+        private Thread T, t2;
 
         //Ping y acceso a internet:
-        Boolean xarxaDisponible;
-        Ping myPing = new Ping();
-        bool responPing = false;
+        private Boolean xarxaDisponible;
+
+        private Ping myPing = new Ping();
+        private bool responPing = false;
 
         //Network Streams, conexiones TCP y IPs:
-        NetworkStream ns;
-        TcpListener Listener;
-        IPAddress PlanetIPAdress;
-        IPEndPoint endpoint;
-        String data = null;
+        private NetworkStream ns;
+
+        private TcpListener Listener;
+        private IPAddress PlanetIPAdress;
+        private IPEndPoint endpoint;
+        private String data = null;
 
         //BBDD:
-        Dades bbdd = new Dades();
-        DataSet inici;
-        Int32 PlanetPortNumber, PortPlanet1;
-        string idPlanet;
-        string idDelivery;
+        private Dades bbdd = new Dades();
+
+        private DataSet inici;
+        private Int32 PlanetPortNumber, PortPlanet1;
+        private string idPlanet;
+        private string idDelivery;
 
         //Encriptación por RSA:
-        byte[] EncryptedData;
-        byte[] elementencriptat;
-        RSACryptoServiceProvider rsaEnc = new RSACryptoServiceProvider();
+        private byte[] EncryptedData;
+
+        private byte[] elementencriptat;
+        private RSACryptoServiceProvider rsaEnc = new RSACryptoServiceProvider();
 
         //Ficheros:
         private const int BufferSize = 1024;
-        string filepathZIP = Application.StartupPath + "\\PACS_Files\\PACS.zip";
-        string filepath = Application.StartupPath + "\\PACS_Files";
+
+        private string filepathZIP = Application.StartupPath + "\\PACS_Files\\PACS.zip";
+        private string filepath = Application.StartupPath + "\\PACS_Files";
 
         // Arranque de fases del programa:
-        string tipo_mensaje, tipo_acceso;
-        int Estado = 0;
-        Boolean iss = false;
+        private string tipo_mensaje, tipo_acceso;
 
+        private int Estado = 0;
+        private Boolean iss = false;
 
         public Nau()
         {
@@ -76,7 +82,6 @@ namespace NauPACS
 
         private void Connectar()
         {
-
             for (int i = 0; i < 11; i++)
             {
                 try //Ping
@@ -90,42 +95,38 @@ namespace NauPACS
                         {
                             responPing = reply.Status == IPStatus.Success;
 
-                            //Control_operario.Text = msj_ConexionEstablecida;
-
-                            //ConnectedPanel.BackColor = Color.Green;
-
                             ConnectedPB.ImageLocation = Application.StartupPath + "\\Assets\\SpaceShip_GreenButtonºrs.png";
                             ConnectedPB.SizeMode = PictureBoxSizeMode.StretchImage;
-
                         }
                         else
                         {
                             ConnectedPB.ImageLocation = Application.StartupPath + "\\Assets\\SpaceShip_RedButtonºrs.png";
                             ConnectedPB.SizeMode = PictureBoxSizeMode.StretchImage;
 
-                            //Control_operario.Text = "No se ha podido obtener respuesta por parte del domino o dirección IP.";
-                            ConsoleBox1.Items.Add("No se ha podido obtener respuesta por parte del domino o dirección IP.");
-                            ConsoleBox1.Items.Add(" ");
-
+                            Lb_Delegate("No se ha podido obtener respuesta por parte del domino o dirección IP.", ConsoleBox1);
+                            Lb_Delegate(" ", ConsoleBox1);
+                            //ConsoleBox1.Items.Add("No se ha podido obtener respuesta por parte del domino o dirección IP.");
+                            //ConsoleBox1.Items.Add(" ");
                         }
                     }
                 }
-
                 catch (PingException pe)
                 {
                     MessageBox.Show(pe.ToString());
 
-                    //Control_operario.Text = msj_ErrorConexion;
-                    ConsoleBox1.Items.Add(msj_ErrorConexion);
-                    ConsoleBox1.Items.Add(" ");
+                    Lb_Delegate(msj_ErrorConexion, ConsoleBox1);
+                    Lb_Delegate(" ", ConsoleBox1);
+                    //ConsoleBox1.Items.Add(msj_ErrorConexion);
+                    //ConsoleBox1.Items.Add(" ");
                 }
             }
 
-
             if (responPing) //Si por lo menos UNO de los pings responde:
             {
-                ConsoleBox1.Items.Add("Acceso a internet aprobado.");
-                ConsoleBox1.Items.Add(" ");
+                Lb_Delegate("Acceso a internet aprobado.", ConsoleBox1);
+                Lb_Delegate(" ", ConsoleBox1);
+                //ConsoleBox1.Items.Add("Acceso a internet aprobado.");
+                //ConsoleBox1.Items.Add(" ");
             }
 
 
@@ -137,38 +138,46 @@ namespace NauPACS
             {
                 client.Connect(endpoint);
 
-                //MessageBox.Show("Planeta encontrado. Listos para contactar.");
-                ConsoleBox1.Items.Add("Planeta encontrado con éxtio, se ha establecido conexión con el servidor. Inicio de fase de comunicación.");
-                ConsoleBox1.Items.Add(" ");
+                Lb_Delegate("Planeta encontrado con éxtio, se ha establecido conexión con el servidor. Inicio de fase de comunicación.", ConsoleBox1);
+                Lb_Delegate(" ", ConsoleBox1);
+                //ConsoleBox1.Items.Add("Planeta encontrado con éxtio, se ha establecido conexión con el servidor. Inicio de fase de comunicación.");
+                //ConsoleBox1.Items.Add(" ");
 
                 ConnectToPlanetPB.ImageLocation = Application.StartupPath + "\\Assets\\SpaceShip_GreenButtonºrs.png";
                 ConnectedPB.SizeMode = PictureBoxSizeMode.StretchImage;
 
-                ConsoleBox1.Items.Add(msj_ConexionEstablecida);
-                ConsoleBox1.Items.Add(" ");
-                //Control_operario_planeta.Text = msj_ConexionEstablecida;
+
+                Lb_Delegate(msj_ConexionEstablecida, ConsoleBox1);
+                Lb_Delegate(" ", ConsoleBox1);
+                //ConsoleBox1.Items.Add(msj_ConexionEstablecida);
+                //ConsoleBox1.Items.Add(" ");
 
                 btn_conectar_servidor.Enabled = true;
-                btn_conectar_servidor.ForeColor = System.Drawing.Color.Black;
+                btn_conectar_servidor.ForeColor = System.Drawing.Color.Aqua;
 
                 btn_desconectar_servidor.Enabled = true;
-                btn_desconectar_servidor.ForeColor = System.Drawing.Color.Black;
+                btn_desconectar_servidor.ForeColor = System.Drawing.Color.Aqua;
 
-                ConsoleBox1.Items.Add(" ");
-                ConsoleBox2.Items.Add("Planet Net Info:");
-                ConsoleBox1.Items.Add(" ");
-                ConsoleBox2.Items.Add("'" + endpoint.ToString() + "'");
-
+                Lb_Delegate(" ", ConsoleBox2);
+                Lb_Delegate("Planet Net Info:", ConsoleBox2);
+                Lb_Delegate(" ", ConsoleBox2);
+                Lb_Delegate("'" + endpoint.ToString() + "'", ConsoleBox2);
+                //ConsoleBox1.Items.Add(" ");
+                //ConsoleBox2.Items.Add("Planet Net Info:");
+                //ConsoleBox1.Items.Add(" ");
+                //ConsoleBox2.Items.Add("'" + endpoint.ToString() + "'");
             }
             catch
             {
-                //MessageBox.Show("No se ha podido conectar al planeta. Revise que el planeta destino coincida con su nave.");
-                ConsoleBox1.Items.Add("No se ha podido conectar al planeta. Revise que el planeta destino coincida con su nave.");
-                ConsoleBox1.Items.Add(" ");
+                Lb_Delegate("No se ha podido conectar al planeta. Revise que el planeta destino coincida con su nave.", ConsoleBox1);
+                Lb_Delegate(" ", ConsoleBox1);
+                //ConsoleBox1.Items.Add("No se ha podido conectar al planeta. Revise que el planeta destino coincida con su nave.");
+                //ConsoleBox1.Items.Add(" ");
 
-                Control_operario_planeta.Text = msj_ErrorConexion;
-                ConsoleBox1.Items.Add(msj_ErrorConexion);
-                ConsoleBox1.Items.Add(" ");
+                Lb_Delegate(msj_ErrorConexion, ConsoleBox1);
+                Lb_Delegate(" ", ConsoleBox1);
+                //ConsoleBox1.Items.Add(msj_ErrorConexion);
+                //ConsoleBox1.Items.Add(" ");
 
                 ConnectToPlanetPB.ImageLocation = Application.StartupPath + "\\Assets\\SpaceShip_RedButtonºrs.png";
                 ConnectedPB.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -177,8 +186,6 @@ namespace NauPACS
             }
         }
 
-
-
         private void btn_conectar_servidor_Click(object sender, EventArgs e)
         {
             CheckForIllegalCrossThreadCalls = false;
@@ -186,14 +193,11 @@ namespace NauPACS
             t2.Start();
         }
 
-
         public void RecibirArchivos()
         {
-
             bool ZipFileExists = false;
 
             string[] ExistingFiles;
-
 
             //Obtener Puerto del planeta correspondiente a la nave seleccionada:
 
@@ -202,7 +206,6 @@ namespace NauPACS
             DataSet dts = bbdd.PortarPerConsulta(query);
 
             PortPlanet1 = Int32.Parse(dts.Tables[0].Rows[0][0].ToString());
-
 
             TcpListener Listener = null;
 
@@ -213,13 +216,14 @@ namespace NauPACS
             }
             catch (Exception ex)
             {
-                ConsoleBox1.Items.Add("ERROR: " + ex.Message);
+                Lb_Delegate("ERROR: " + ex.Message, ConsoleBox1);
+                Lb_Delegate(" ", ConsoleBox1);
+                //ConsoleBox1.Items.Add("ERROR: " + ex.Message);
                 Console.WriteLine(ex.Message);
             }
 
             byte[] RecData = new byte[BufferSize];
             int RecBytes;
-
 
             //Loop infinito (while)
 
@@ -273,7 +277,9 @@ namespace NauPACS
                             netstream.Close();
                             Archivos.Close();
 
-                            ConsoleBox1.Items.Add("Alternando archivos, espere porfavor...");
+                            Lb_Delegate("Alternando archivos, espere porfavor...", ConsoleBox1);
+                            Lb_Delegate(" ", ConsoleBox1);
+                            //ConsoleBox1.Items.Add("Alternando archivos, espere porfavor...");
 
                             //Descomprimir
                             ZipFile.ExtractToDirectory(filepathZIP, filepath);
@@ -281,31 +287,31 @@ namespace NauPACS
                             //Tratar fichero:
                             tractar_fitxer();
 
-                            ConsoleBox1.Items.Add("Archivos tratados correctamente. Presione 'Enviar Ficheros' para mandarlos hacia el planeta.");
+
+                            Lb_Delegate("Archivos tratados correctamente. Presione 'Enviar Ficheros' para mandarlos hacia el planeta.", ConsoleBox1);
+                            Lb_Delegate(" ", ConsoleBox1);
+                            //ConsoleBox1.Items.Add("Archivos tratados correctamente. Presione 'Enviar Ficheros' para mandarlos hacia el planeta.");
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    //MessageBox.Show("Error: " + ex.Message);
-                    ConsoleBox1.Items.Add("Error: " + ex.Message);
+                    Lb_Delegate("Error: " + ex.Message, ConsoleBox1);
+                    Lb_Delegate(" ", ConsoleBox1);
+                    //ConsoleBox1.Items.Add("Error: " + ex.Message);
 
                     //netstream.Close();
                 }
             }
         }
 
-
-
         private void tractar_fitxer()
         {
-
             //Crear diccionario para referenciar con los numeros que devuelven los ficheros:
 
             string query = "select D.idPlanet from DeliveryData D, Planets P where D.idSpaceShip = (select idSpaceShip from SpaceShips where CodeSpaceShip = '" + cmb_Nau.Text + "') AND D.idPlanet = P.idPlanet;";
             DataSet dts = bbdd.PortarPerConsulta(query);
             idPlanet = dts.Tables[0].Rows[0][0].ToString();
-
 
             Dictionary<string, string> Diccionario = new Dictionary<string, string>();
 
@@ -323,23 +329,19 @@ namespace NauPACS
                 Diccionario.Add(Word, Numbers);
             }
 
-
             //Leer ficheros y guardar las "keys" equivalentes en un nuevo archivo:
 
             FileStream fs = File.Create(filepath + "\\PACCSOL.txt");
 
             StreamWriter writer = new StreamWriter(filepath + "\\PACSSOL.txt");
 
-
             for (int i = 1; i < 4; i++)
             {
-
                 int x = 0;
 
                 StreamReader File = new StreamReader(filepath + "\\PACS" + i + ".txt");
 
                 string FileData = File.ReadToEnd();
-
 
                 for (x = 0; x < FileData.Length; x = x + 3)
                 {
@@ -348,21 +350,17 @@ namespace NauPACS
                     var myKey = Diccionario.FirstOrDefault(y => y.Value == FileDigits).Key;
 
                     writer.Write(myKey);
-
                 }
 
                 File.Close();
-
             }
 
             writer.Close();
         }
 
 
-
         private void Conectar_Servidor()
         {
-
             ConsoleBox1.Items.Clear();
 
             try
@@ -400,8 +398,9 @@ namespace NauPACS
                                     }
                                     catch
                                     {
-                                        //MessageBox.Show("No se ha subministrado el codigo de validación.");
-                                        ConsoleBox1.Items.Add("ERROR: No se ha podido subministrar el codigo de validación.");
+                                        Lb_Delegate("ERROR: No se ha podido subministrar el codigo de validación.", ConsoleBox1);
+                                        Lb_Delegate(" ", ConsoleBox1);
+                                        //ConsoleBox1.Items.Add("ERROR: No se ha podido subministrar el codigo de validación.");
                                         Estado = 0;
                                     }
                                 }
@@ -412,15 +411,15 @@ namespace NauPACS
                                     ThreadStart Ts = new ThreadStart(RecibirArchivos);
                                     T = new Thread(Ts);
                                     T.Start();
-
                                 }
                                 else if (tipo_acceso == "VP" && Estado == 2)
                                 {
                                     AccessPB.ImageLocation = Application.StartupPath + "\\Assets\\SpaceShip_GreenButtonºrs.png";
                                     ConnectedPB.SizeMode = PictureBoxSizeMode.StretchImage;
 
-                                    //MessageBox.Show("ACCESO PERMITIDO");
-                                    ConsoleBox1.Items.Add("Planeta X: ACCESO PERMITIDO");
+                                    Lb_Delegate("Mensaje de Planeta: ACCESO PERMITIDO", ConsoleBox1);
+                                    Lb_Delegate(" ", ConsoleBox1);
+                                    //ConsoleBox1.Items.Add("Mensaje de Planeta: ACCESO PERMITIDO");
                                 }
                                 else
                                 {
@@ -436,17 +435,18 @@ namespace NauPACS
             }
             catch (SocketException se)
             {
-                //MessageBox.Show("ERROR: " + se.Message);
-                ConsoleBox1.Items.Add("ERROR: " + se.Message);
-
+                Lb_Delegate("ERROR: " + se.Message, ConsoleBox1);
+                Lb_Delegate(" ", ConsoleBox1);
+                //ConsoleBox1.Items.Add("ERROR: " + se.Message);
             }
         }
-
 
         //Threat Desconectar Server
         private void btn_desconectar_servidor_Click(object sender, EventArgs e)
         {
-            ConsoleBox1.Items.Add("Apagando servidor, porfavor espere...");
+            Lb_Delegate("Apagando servidor, porfavor espere...", ConsoleBox1);
+            Lb_Delegate(" ", ConsoleBox1);
+            //ConsoleBox1.Items.Add("Apagando servidor, porfavor espere...");
 
             t2.Abort();
             Listener.Stop();
@@ -457,13 +457,13 @@ namespace NauPACS
             ConsoleBox1.Items.Clear();
             ConsoleBox2.Items.Clear();
 
-            ConsoleBox1.Items.Add("El servidor se ha apagado correctamente.");
+            Lb_Delegate("El servidor se ha apagado correctamente.", ConsoleBox1);
+            Lb_Delegate(" ", ConsoleBox1);
+            //ConsoleBox1.Items.Add("El servidor se ha apagado correctamente.");
         }
-
 
         private void Obtener_codi_validacio()
         {
-            txb_VCEncrypted.Clear();
 
             //Obtener idPlanet de la nave correspondiente al ComboBox:
 
@@ -472,7 +472,6 @@ namespace NauPACS
             DataSet dts = bbdd.PortarPerConsulta(query);
 
             string planet_code = dts.Tables[0].Rows[0][0].ToString();
-
 
             //Obtener clave pública y CV:
 
@@ -484,7 +483,6 @@ namespace NauPACS
 
             string ValidationCode = dts.Tables[0].Rows[0]["ValidationCode"].ToString();
 
-
             //Encriptar Código con Clave:
 
             rsaEnc.FromXmlString(PublicKey);
@@ -494,12 +492,15 @@ namespace NauPACS
             byte[] dataToEncrypt = ByteConverter.GetBytes(ValidationCode);
             elementencriptat = rsaEnc.Encrypt(dataToEncrypt, false);
 
-            txb_VCEncrypted.Text = ByteConverter.GetString(elementencriptat);
+            btn_enviarCV.Enabled = true;
 
-            ConsoleBox2.Items.Add("CV: ");
-            ConsoleBox2.Items.Add(ByteConverter.GetString(elementencriptat));
+            Lb_Delegate("CV: ", ConsoleBox2);
+            Lb_Delegate(ByteConverter.GetString(elementencriptat), ConsoleBox2);
+            Lb_Delegate(" ", ConsoleBox2);
+            //ConsoleBox2.Items.Add("CV: ");
+            //ConsoleBox2.Items.Add(ByteConverter.GetString(elementencriptat));
+            //ConsoleBox2.Items.Add(" ");
         }
-
 
         private void Nau_Load(object sender, EventArgs e)
         {
@@ -513,7 +514,6 @@ namespace NauPACS
             cmb_Nau.SelectedIndex = 0;
         }
 
-
         public byte[] RSAEncrypt(byte[] DataToEncrypt, RSAParameters RSAKeyInfo, bool DoOAEPPadding)
         {
             byte[] encryptedData;
@@ -524,7 +524,6 @@ namespace NauPACS
             }
             return encryptedData;
         }
-
 
         private IPEndPoint ObtainPlanetNetwork()
         {
@@ -541,11 +540,13 @@ namespace NauPACS
             return endpoint;
         }
 
-
         private void btn_enviarFichero_Click(object sender, EventArgs e)
         {
             if (Estado >= 1)
             {
+
+                btn_enviarFichero.Enabled = true;
+
                 //Enviar fichero tractado:
 
                 string queryIP = "select IPPlanet, PortPlanet1 from Planets where idPlanet = 23";
@@ -567,16 +568,18 @@ namespace NauPACS
                     ns.Close();
                     ns.Dispose();
 
-                    ConsoleBox1.Items.Add("Archivos alternos enviados al planeta.");
-                    ConsoleBox1.Items.Add(" ");
+                    Lb_Delegate("Archivos alternos enviados al planeta.", ConsoleBox1);
+                    Lb_Delegate(" ", ConsoleBox1);
+                    //ConsoleBox1.Items.Add("Archivos alternos enviados al planeta.");
+                    //ConsoleBox1.Items.Add(" ");
                 }
                 catch (Exception ex)
                 {
-                    //MessageBox.Show(ex.ToString());
-                    ConsoleBox1.Items.Add("ERROR: " + ex.ToString());
-                    ConsoleBox1.Items.Add(" ");
+                    Lb_Delegate("ERROR: " + ex.ToString(), ConsoleBox1);
+                    Lb_Delegate(" ", ConsoleBox1);
+                    //ConsoleBox1.Items.Add("ERROR: " + ex.ToString());
+                    //ConsoleBox1.Items.Add(" ");
                 }
-
             }
         }
 
@@ -618,16 +621,18 @@ namespace NauPACS
 
         private void btn_PlanetConnect_Click(object sender, EventArgs e)
         {
-
             ConsoleBox1.Items.Clear();
             ConsoleBox2.Items.Clear();
 
             ConnectedPB.ImageLocation = Application.StartupPath + "\\Assets\\SpaceShip_DefaultButtonº.png";
             ConnectedPB.SizeMode = PictureBoxSizeMode.StretchImage;
 
-            ConsoleBox1.Items.Add(" ");
-            ConsoleBox1.Items.Add("Iniciando conexión...");
-            ConsoleBox1.Items.Add(" ");
+            Lb_Delegate(" ", ConsoleBox1);
+            Lb_Delegate("Iniciando conexión...", ConsoleBox1);
+            Lb_Delegate(" ", ConsoleBox1);
+            //ConsoleBox1.Items.Add(" ");
+            //ConsoleBox1.Items.Add("Iniciando conexión...");
+            //ConsoleBox1.Items.Add(" ");
 
             try
             {
@@ -643,8 +648,10 @@ namespace NauPACS
                 SkyBackGround.BackgroundImage = Properties.Resources.P1;
                 SkyBackGround.BackgroundImageLayout = ImageLayout.Stretch;
 
-                ConsoleBox1.Items.Add("Se ha enviado una petición de acceso al planeta.");
-                ConsoleBox1.Items.Add(" ");
+                Lb_Delegate("Se ha enviado una petición de acceso al planeta.", ConsoleBox1);
+                Lb_Delegate(" ", ConsoleBox1);
+                //ConsoleBox1.Items.Add("Se ha enviado una petición de acceso al planeta.");
+                //ConsoleBox1.Items.Add(" ");
 
                 ns.Flush();
                 ns.Dispose();
@@ -657,16 +664,17 @@ namespace NauPACS
                 SkyBackGround.BackgroundImage = Properties.Resources.SpaceBackGround;
                 SkyBackGround.BackgroundImageLayout = ImageLayout.Stretch;
 
-                ConsoleBox1.Items.Add("Su conexión con el planeta ha expirado.");
-                ConsoleBox1.Items.Add(" ");
-                ConsoleBox1.Items.Add("----------------------------------------");
+                Lb_Delegate("Su conexión con el planeta ha expirado.", ConsoleBox1);
+                Lb_Delegate(" ", ConsoleBox1);
+                Lb_Delegate("----------------------------------------------", ConsoleBox1);
+                //ConsoleBox1.Items.Add("Su conexión con el planeta ha expirado.");
+                //ConsoleBox1.Items.Add(" ");
+                //ConsoleBox1.Items.Add("----------------------------------------------");
             }
         }
 
-
         private void btn_enviarCV_Click(object sender, EventArgs e)
         {
-
             //Conectarse como cliente hacia el planeta:
 
             try
@@ -678,7 +686,6 @@ namespace NauPACS
                 TcpClient Nouclient = new TcpClient();
                 Nouclient.Connect(endpoint);
 
-
                 //Enviar CV a través del network stream:
 
                 NetworkStream ns = Nouclient.GetStream();
@@ -687,19 +694,23 @@ namespace NauPACS
 
                 ns.Write(dades, 0, dades.Length);
 
+                Thread.Sleep(2000); //Parada del threat de 2s para esperar una respuesta del servidor antes de enviar el CV.
+
                 dades = elementencriptat;
 
                 ns.Write(dades, 0, dades.Length);
 
-                //MessageBox.Show("Codigo de validación encriptado enviado!");
-                ConsoleBox1.Items.Add("Codigo de validación encriptado (CV) enviado.");
+                Lb_Delegate("Codigo de validación encriptado (CV) enviado.", ConsoleBox1);
+                Lb_Delegate(" ", ConsoleBox1);
+                //ConsoleBox1.Items.Add("Codigo de validación encriptado (CV) enviado.");
 
                 Nouclient.Close();
             }
             catch
             {
-                MessageBox.Show("Error al enviar código de validación.");
-                ConsoleBox1.Items.Add("ERROR: Problema al enviar código de validación al planeta.");
+                Lb_Delegate("ERROR: Problema al enviar código de validación al planeta.", ConsoleBox1);
+                Lb_Delegate(" ", ConsoleBox1);
+                //ConsoleBox1.Items.Add("ERROR: Problema al enviar código de validación al planeta.");
             }
         }
 
@@ -717,6 +728,22 @@ namespace NauPACS
             {
             }
         }
+
+        //Delegate en la ListBox (ConsoleBox1 & 2)
+        private void Lb_Delegate(string text, ListBox lb)
+        {
+            if (ConsoleBox1.InvokeRequired)
+            {
+                lb.Invoke((MethodInvoker)delegate
+                {
+                    lb.Items.Add(text);
+                });
+            }
+            else
+            {
+                lb.Items.Add(text);
+            }
+        }
+
     }
 }
-

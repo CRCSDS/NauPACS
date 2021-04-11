@@ -63,6 +63,16 @@ namespace NauPACS.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap FuturisticButtonTexture {
+            get {
+                object obj = ResourceManager.GetObject("FuturisticButtonTexture", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap P1 {
             get {
                 object obj = ResourceManager.GetObject("P1", resourceCulture);
@@ -73,9 +83,29 @@ namespace NauPACS.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Planet_Holograma {
+            get {
+                object obj = ResourceManager.GetObject("Planet_Holograma", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SpaceBackGround {
             get {
                 object obj = ResourceManager.GetObject("SpaceBackGround", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SpaceShip_ButtonTextureº {
+            get {
+                object obj = ResourceManager.GetObject("SpaceShip_ButtonTextureº", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

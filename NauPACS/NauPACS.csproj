@@ -125,5 +125,14 @@
   <ItemGroup>
     <None Include="Resources\P11.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Planet_Holograma.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\FuturisticButtonTexture.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SpaceShip_ButtonTextureº.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
