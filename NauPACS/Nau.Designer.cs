@@ -30,7 +30,7 @@ namespace NauPACS
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pacsDataSet = new NauPACS.pacsDataSet();
             this.pacsDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.SkyBackGround = new System.Windows.Forms.Panel();
@@ -176,11 +176,11 @@ namespace NauPACS
             // 
             // dtg_Delivery
             // 
-            dataGridViewCellStyle19.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle19.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle19.SelectionBackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle19.SelectionForeColor = System.Drawing.Color.White;
-            this.dtg_Delivery.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
+            this.dtg_Delivery.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dtg_Delivery.BackgroundColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.dtg_Delivery.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dtg_Delivery.GridColor = System.Drawing.SystemColors.ActiveCaptionText;
@@ -245,7 +245,7 @@ namespace NauPACS
             this.btn_enviarCV.Enabled = false;
             this.btn_enviarCV.FlatAppearance.BorderSize = 0;
             this.btn_enviarCV.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_enviarCV.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btn_enviarCV.ForeColor = System.Drawing.Color.Aqua;
             this.btn_enviarCV.Image = global::NauPACS.Properties.Resources.SpaceShip_ButtonTextureº;
             this.btn_enviarCV.Location = new System.Drawing.Point(1241, 963);
             this.btn_enviarCV.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -272,7 +272,7 @@ namespace NauPACS
             this.btn_desconectar_servidor.Enabled = false;
             this.btn_desconectar_servidor.FlatAppearance.BorderSize = 0;
             this.btn_desconectar_servidor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_desconectar_servidor.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btn_desconectar_servidor.ForeColor = System.Drawing.Color.Aqua;
             this.btn_desconectar_servidor.Image = global::NauPACS.Properties.Resources.SpaceShip_ButtonTextureº;
             this.btn_desconectar_servidor.Location = new System.Drawing.Point(601, 948);
             this.btn_desconectar_servidor.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -290,7 +290,7 @@ namespace NauPACS
             this.btn_conectar_servidor.Enabled = false;
             this.btn_conectar_servidor.FlatAppearance.BorderSize = 0;
             this.btn_conectar_servidor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_conectar_servidor.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btn_conectar_servidor.ForeColor = System.Drawing.Color.Aqua;
             this.btn_conectar_servidor.Image = global::NauPACS.Properties.Resources.SpaceShip_ButtonTextureº;
             this.btn_conectar_servidor.Location = new System.Drawing.Point(388, 948);
             this.btn_conectar_servidor.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -308,7 +308,7 @@ namespace NauPACS
             this.btn_enviarFichero.Enabled = false;
             this.btn_enviarFichero.FlatAppearance.BorderSize = 0;
             this.btn_enviarFichero.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_enviarFichero.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btn_enviarFichero.ForeColor = System.Drawing.Color.Aqua;
             this.btn_enviarFichero.Image = global::NauPACS.Properties.Resources.SpaceShip_ButtonTextureº;
             this.btn_enviarFichero.Location = new System.Drawing.Point(1460, 963);
             this.btn_enviarFichero.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
