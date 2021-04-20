@@ -33,7 +33,7 @@ namespace NauPACS
         private TcpClient server = new TcpClient();
 
         //Hilos:
-        private Thread T, t2;
+        private Thread Files_Thread, ConnectServer_Thread;
 
         //Ping y acceso a internet:
         private Boolean xarxaDisponible;
@@ -129,7 +129,6 @@ namespace NauPACS
                 //ConsoleBox1.Items.Add(" ");
             }
 
-
             //Conexion cliente contra planeta:
 
             endpoint = ObtainPlanetNetwork();
@@ -145,7 +144,6 @@ namespace NauPACS
 
                 ConnectToPlanetPB.ImageLocation = Application.StartupPath + "\\Assets\\SpaceShip_GreenButtonºrs.png";
                 ConnectedPB.SizeMode = PictureBoxSizeMode.StretchImage;
-
 
                 Lb_Delegate(msj_ConexionEstablecida, ConsoleBox1);
                 Lb_Delegate(" ", ConsoleBox1);
@@ -189,8 +187,8 @@ namespace NauPACS
         private void btn_conectar_servidor_Click(object sender, EventArgs e)
         {
             CheckForIllegalCrossThreadCalls = false;
-            t2 = new Thread(Conectar_Servidor);
-            t2.Start();
+            ConnectServer_Thread = new Thread(Conectar_Servidor);
+            ConnectServer_Thread.Start();
         }
 
         public void RecibirArchivos()
@@ -287,7 +285,6 @@ namespace NauPACS
                             //Tratar fichero:
                             tractar_fitxer();
 
-
                             Lb_Delegate("Archivos tratados correctamente. Presione 'Enviar Ficheros' para mandarlos hacia el planeta.", ConsoleBox1);
                             Lb_Delegate(" ", ConsoleBox1);
                             //ConsoleBox1.Items.Add("Archivos tratados correctamente. Presione 'Enviar Ficheros' para mandarlos hacia el planeta.");
@@ -358,7 +355,6 @@ namespace NauPACS
             writer.Close();
         }
 
-
         private void Conectar_Servidor()
         {
             ConsoleBox1.Items.Clear();
@@ -409,8 +405,8 @@ namespace NauPACS
                                     Estado++;
 
                                     ThreadStart Ts = new ThreadStart(RecibirArchivos);
-                                    T = new Thread(Ts);
-                                    T.Start();
+                                    Files_Thread = new Thread(Ts);
+                                    Files_Thread.Start();
                                 }
                                 else if (tipo_acceso == "VP" && Estado == 2)
                                 {
@@ -424,7 +420,7 @@ namespace NauPACS
                                 else
                                 {
                                     Listener.Stop();
-                                    t2.Abort();
+                                    ConnectServer_Thread.Abort();
                                     Estado = 0;
                                 }
 
@@ -448,11 +444,11 @@ namespace NauPACS
             Lb_Delegate(" ", ConsoleBox1);
             //ConsoleBox1.Items.Add("Apagando servidor, porfavor espere...");
 
-            t2.Abort();
+            Files_Thread.Abort();
+            ConnectServer_Thread.Abort();
             Listener.Stop();
             client.Close();
             client.Dispose();
-            T.Abort();
 
             ConsoleBox1.Items.Clear();
             ConsoleBox2.Items.Clear();
@@ -464,7 +460,6 @@ namespace NauPACS
 
         private void Obtener_codi_validacio()
         {
-
             //Obtener idPlanet de la nave correspondiente al ComboBox:
 
             string query = "select idPlanet from DeliveryData where idSpaceShip = (select idSpaceShip from SpaceShips where CodeSpaceShip = '" + cmb_Nau.Text + "')";
@@ -504,6 +499,9 @@ namespace NauPACS
 
         private void Nau_Load(object sender, EventArgs e)
         {
+
+            btn_ShutDown.BackgroundImageLayout = ImageLayout.Zoom;
+
             string query = "select * from SpaceShips";
 
             inici = bbdd.PortarPerConsulta(query);
@@ -544,9 +542,6 @@ namespace NauPACS
         {
             if (Estado >= 1)
             {
-
-                btn_enviarFichero.Enabled = true;
-
                 //Enviar fichero tractado:
 
                 string queryIP = "select IPPlanet, PortPlanet1 from Planets where idPlanet = 23";
@@ -673,6 +668,16 @@ namespace NauPACS
             }
         }
 
+        private void btn_ShutDown_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void btn_Minimize_Click(object sender, EventArgs e)
+        {
+            WindowState = FormWindowState.Minimized;
+        }
+
         private void btn_enviarCV_Click(object sender, EventArgs e)
         {
             //Conectarse como cliente hacia el planeta:
@@ -699,6 +704,8 @@ namespace NauPACS
                 dades = elementencriptat;
 
                 ns.Write(dades, 0, dades.Length);
+
+                btn_enviarFichero.Enabled = true;
 
                 Lb_Delegate("Codigo de validación encriptado (CV) enviado.", ConsoleBox1);
                 Lb_Delegate(" ", ConsoleBox1);
@@ -744,6 +751,7 @@ namespace NauPACS
                 lb.Items.Add(text);
             }
         }
+
 
     }
 }

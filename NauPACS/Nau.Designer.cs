@@ -31,10 +31,18 @@ namespace NauPACS
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pacsDataSet = new NauPACS.pacsDataSet();
             this.pacsDataSetBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.SkyBackGround = new System.Windows.Forms.Panel();
             this.SpaceShipBackGround = new System.Windows.Forms.Panel();
+            this.panel_MBtnTexture = new System.Windows.Forms.Panel();
+            this.btn_ShutDown = new System.Windows.Forms.Button();
+            this.panel_SDBtnTexture = new System.Windows.Forms.Panel();
+            this.btn_Minimize = new System.Windows.Forms.Button();
             this.Pl_PlanetHolograma = new System.Windows.Forms.PictureBox();
             this.AccessPB = new System.Windows.Forms.PictureBox();
             this.ConnectToPlanetPB = new System.Windows.Forms.PictureBox();
@@ -43,17 +51,19 @@ namespace NauPACS
             this.cmb_Nau = new System.Windows.Forms.ComboBox();
             this.dtg_Delivery = new System.Windows.Forms.DataGridView();
             this.ConsoleBox1 = new System.Windows.Forms.ListBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.btn_PlanetConnect = new System.Windows.Forms.Button();
             this.btn_enviarCV = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.btn_desconectar_servidor = new System.Windows.Forms.Button();
             this.btn_conectar_servidor = new System.Windows.Forms.Button();
             this.btn_enviarFichero = new System.Windows.Forms.Button();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pacsDataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pacsDataSetBindingSource)).BeginInit();
             this.SkyBackGround.SuspendLayout();
             this.SpaceShipBackGround.SuspendLayout();
+            this.panel_MBtnTexture.SuspendLayout();
+            this.panel_SDBtnTexture.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Pl_PlanetHolograma)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AccessPB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ConnectToPlanetPB)).BeginInit();
@@ -79,7 +89,7 @@ namespace NauPACS
             this.SkyBackGround.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SkyBackGround.Location = new System.Drawing.Point(0, 0);
             this.SkyBackGround.Name = "SkyBackGround";
-            this.SkyBackGround.Size = new System.Drawing.Size(1920, 1080);
+            this.SkyBackGround.Size = new System.Drawing.Size(1920, 1055);
             this.SkyBackGround.TabIndex = 25;
             // 
             // SpaceShipBackGround
@@ -87,6 +97,8 @@ namespace NauPACS
             this.SpaceShipBackGround.BackColor = System.Drawing.Color.Transparent;
             this.SpaceShipBackGround.BackgroundImage = global::NauPACS.Properties.Resources.spaceship_hud_rs2;
             this.SpaceShipBackGround.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.SpaceShipBackGround.Controls.Add(this.panel_MBtnTexture);
+            this.SpaceShipBackGround.Controls.Add(this.panel_SDBtnTexture);
             this.SpaceShipBackGround.Controls.Add(this.Pl_PlanetHolograma);
             this.SpaceShipBackGround.Controls.Add(this.AccessPB);
             this.SpaceShipBackGround.Controls.Add(this.ConnectToPlanetPB);
@@ -95,7 +107,6 @@ namespace NauPACS
             this.SpaceShipBackGround.Controls.Add(this.cmb_Nau);
             this.SpaceShipBackGround.Controls.Add(this.dtg_Delivery);
             this.SpaceShipBackGround.Controls.Add(this.ConsoleBox1);
-            this.SpaceShipBackGround.Controls.Add(this.label2);
             this.SpaceShipBackGround.Controls.Add(this.btn_PlanetConnect);
             this.SpaceShipBackGround.Controls.Add(this.btn_enviarCV);
             this.SpaceShipBackGround.Controls.Add(this.label5);
@@ -105,8 +116,64 @@ namespace NauPACS
             this.SpaceShipBackGround.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SpaceShipBackGround.Location = new System.Drawing.Point(0, 0);
             this.SpaceShipBackGround.Name = "SpaceShipBackGround";
-            this.SpaceShipBackGround.Size = new System.Drawing.Size(1920, 1080);
+            this.SpaceShipBackGround.Size = new System.Drawing.Size(1920, 1055);
             this.SpaceShipBackGround.TabIndex = 25;
+            // 
+            // panel_MBtnTexture
+            // 
+            this.panel_MBtnTexture.BackgroundImage = global::NauPACS.Properties.Resources.SpaceShip_ButtonTextureº;
+            this.panel_MBtnTexture.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel_MBtnTexture.Controls.Add(this.btn_ShutDown);
+            this.panel_MBtnTexture.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.panel_MBtnTexture.Location = new System.Drawing.Point(1856, 3);
+            this.panel_MBtnTexture.Name = "panel_MBtnTexture";
+            this.panel_MBtnTexture.Size = new System.Drawing.Size(64, 54);
+            this.panel_MBtnTexture.TabIndex = 36;
+            // 
+            // btn_ShutDown
+            // 
+            this.btn_ShutDown.BackColor = System.Drawing.Color.Transparent;
+            this.btn_ShutDown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btn_ShutDown.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_ShutDown.FlatAppearance.BorderSize = 0;
+            this.btn_ShutDown.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_ShutDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_ShutDown.ForeColor = System.Drawing.Color.Red;
+            this.btn_ShutDown.Location = new System.Drawing.Point(3, 3);
+            this.btn_ShutDown.Name = "btn_ShutDown";
+            this.btn_ShutDown.Size = new System.Drawing.Size(58, 48);
+            this.btn_ShutDown.TabIndex = 33;
+            this.btn_ShutDown.Text = "X";
+            this.btn_ShutDown.UseVisualStyleBackColor = false;
+            this.btn_ShutDown.Click += new System.EventHandler(this.btn_ShutDown_Click);
+            // 
+            // panel_SDBtnTexture
+            // 
+            this.panel_SDBtnTexture.BackgroundImage = global::NauPACS.Properties.Resources.SpaceShip_ButtonTextureº;
+            this.panel_SDBtnTexture.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel_SDBtnTexture.Controls.Add(this.btn_Minimize);
+            this.panel_SDBtnTexture.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.panel_SDBtnTexture.Location = new System.Drawing.Point(1786, 3);
+            this.panel_SDBtnTexture.Name = "panel_SDBtnTexture";
+            this.panel_SDBtnTexture.Size = new System.Drawing.Size(64, 54);
+            this.panel_SDBtnTexture.TabIndex = 35;
+            // 
+            // btn_Minimize
+            // 
+            this.btn_Minimize.BackColor = System.Drawing.Color.Transparent;
+            this.btn_Minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btn_Minimize.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_Minimize.FlatAppearance.BorderSize = 0;
+            this.btn_Minimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Minimize.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Minimize.ForeColor = System.Drawing.Color.Red;
+            this.btn_Minimize.Location = new System.Drawing.Point(3, -3);
+            this.btn_Minimize.Name = "btn_Minimize";
+            this.btn_Minimize.Size = new System.Drawing.Size(61, 54);
+            this.btn_Minimize.TabIndex = 34;
+            this.btn_Minimize.Text = "-";
+            this.btn_Minimize.UseVisualStyleBackColor = false;
+            this.btn_Minimize.Click += new System.EventHandler(this.btn_Minimize_Click);
             // 
             // Pl_PlanetHolograma
             // 
@@ -165,10 +232,11 @@ namespace NauPACS
             // cmb_Nau
             // 
             this.cmb_Nau.BackColor = System.Drawing.Color.Black;
+            this.cmb_Nau.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmb_Nau.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmb_Nau.ForeColor = System.Drawing.Color.Aqua;
             this.cmb_Nau.FormattingEnabled = true;
-            this.cmb_Nau.Location = new System.Drawing.Point(918, 571);
+            this.cmb_Nau.Location = new System.Drawing.Point(918, 572);
             this.cmb_Nau.Name = "cmb_Nau";
             this.cmb_Nau.Size = new System.Drawing.Size(170, 24);
             this.cmb_Nau.TabIndex = 8;
@@ -176,22 +244,59 @@ namespace NauPACS
             // 
             // dtg_Delivery
             // 
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
+            this.dtg_Delivery.AllowUserToAddRows = false;
+            this.dtg_Delivery.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.InfoText;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Cyan;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Cyan;
             this.dtg_Delivery.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dtg_Delivery.BackgroundColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.dtg_Delivery.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.InfoText;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Cyan;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Cyan;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtg_Delivery.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dtg_Delivery.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dtg_Delivery.GridColor = System.Drawing.SystemColors.ActiveCaptionText;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.InfoText;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.Cyan;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Cyan;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dtg_Delivery.DefaultCellStyle = dataGridViewCellStyle3;
+            this.dtg_Delivery.EnableHeadersVisualStyles = false;
+            this.dtg_Delivery.GridColor = System.Drawing.Color.Cyan;
             this.dtg_Delivery.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.dtg_Delivery.Location = new System.Drawing.Point(839, 600);
+            this.dtg_Delivery.Location = new System.Drawing.Point(746, 601);
             this.dtg_Delivery.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dtg_Delivery.Name = "dtg_Delivery";
             this.dtg_Delivery.ReadOnly = true;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.InfoText;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.Cyan;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.Cyan;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dtg_Delivery.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            this.dtg_Delivery.RowHeadersVisible = false;
             this.dtg_Delivery.RowHeadersWidth = 62;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.InfoText;
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Cyan;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.Cyan;
+            this.dtg_Delivery.RowsDefaultCellStyle = dataGridViewCellStyle5;
             this.dtg_Delivery.RowTemplate.Height = 28;
-            this.dtg_Delivery.Size = new System.Drawing.Size(332, 85);
+            this.dtg_Delivery.Size = new System.Drawing.Size(548, 85);
             this.dtg_Delivery.TabIndex = 21;
             // 
             // ConsoleBox1
@@ -208,18 +313,6 @@ namespace NauPACS
             this.ConsoleBox1.TabIndex = 25;
             this.ConsoleBox1.Click += new System.EventHandler(this.ConsoleBox1_Click);
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Font = new System.Drawing.Font("OCR A Extended", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.AliceBlue;
-            this.label2.Location = new System.Drawing.Point(873, 513);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(267, 25);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "SELECCION DE NAVE";
-            // 
             // btn_PlanetConnect
             // 
             this.btn_PlanetConnect.BackColor = System.Drawing.Color.Transparent;
@@ -227,7 +320,7 @@ namespace NauPACS
             this.btn_PlanetConnect.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btn_PlanetConnect.FlatAppearance.BorderSize = 0;
             this.btn_PlanetConnect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_PlanetConnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_PlanetConnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_PlanetConnect.ForeColor = System.Drawing.Color.Aqua;
             this.btn_PlanetConnect.Image = global::NauPACS.Properties.Resources.SpaceShip_ButtonTextureº;
             this.btn_PlanetConnect.Location = new System.Drawing.Point(499, 657);
@@ -247,7 +340,7 @@ namespace NauPACS
             this.btn_enviarCV.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_enviarCV.ForeColor = System.Drawing.Color.Aqua;
             this.btn_enviarCV.Image = global::NauPACS.Properties.Resources.SpaceShip_ButtonTextureº;
-            this.btn_enviarCV.Location = new System.Drawing.Point(1241, 963);
+            this.btn_enviarCV.Location = new System.Drawing.Point(1292, 963);
             this.btn_enviarCV.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_enviarCV.Name = "btn_enviarCV";
             this.btn_enviarCV.Size = new System.Drawing.Size(213, 85);
@@ -272,9 +365,10 @@ namespace NauPACS
             this.btn_desconectar_servidor.Enabled = false;
             this.btn_desconectar_servidor.FlatAppearance.BorderSize = 0;
             this.btn_desconectar_servidor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_desconectar_servidor.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_desconectar_servidor.ForeColor = System.Drawing.Color.Aqua;
             this.btn_desconectar_servidor.Image = global::NauPACS.Properties.Resources.SpaceShip_ButtonTextureº;
-            this.btn_desconectar_servidor.Location = new System.Drawing.Point(601, 948);
+            this.btn_desconectar_servidor.Location = new System.Drawing.Point(546, 949);
             this.btn_desconectar_servidor.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_desconectar_servidor.Name = "btn_desconectar_servidor";
             this.btn_desconectar_servidor.Size = new System.Drawing.Size(215, 100);
@@ -292,7 +386,7 @@ namespace NauPACS
             this.btn_conectar_servidor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_conectar_servidor.ForeColor = System.Drawing.Color.Aqua;
             this.btn_conectar_servidor.Image = global::NauPACS.Properties.Resources.SpaceShip_ButtonTextureº;
-            this.btn_conectar_servidor.Location = new System.Drawing.Point(388, 948);
+            this.btn_conectar_servidor.Location = new System.Drawing.Point(333, 949);
             this.btn_conectar_servidor.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_conectar_servidor.Name = "btn_conectar_servidor";
             this.btn_conectar_servidor.Size = new System.Drawing.Size(207, 100);
@@ -310,7 +404,7 @@ namespace NauPACS
             this.btn_enviarFichero.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_enviarFichero.ForeColor = System.Drawing.Color.Aqua;
             this.btn_enviarFichero.Image = global::NauPACS.Properties.Resources.SpaceShip_ButtonTextureº;
-            this.btn_enviarFichero.Location = new System.Drawing.Point(1460, 963);
+            this.btn_enviarFichero.Location = new System.Drawing.Point(1511, 963);
             this.btn_enviarFichero.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_enviarFichero.Name = "btn_enviarFichero";
             this.btn_enviarFichero.Size = new System.Drawing.Size(199, 85);
@@ -319,11 +413,18 @@ namespace NauPACS
             this.btn_enviarFichero.UseVisualStyleBackColor = false;
             this.btn_enviarFichero.Click += new System.EventHandler(this.btn_enviarFichero_Click);
             // 
+            // imageList1
+            // 
+            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            // 
             // Nau
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1920, 1080);
+            this.AutoScroll = true;
+            this.ClientSize = new System.Drawing.Size(1920, 1055);
             this.Controls.Add(this.SkyBackGround);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Nau";
@@ -336,6 +437,8 @@ namespace NauPACS
             this.SkyBackGround.ResumeLayout(false);
             this.SpaceShipBackGround.ResumeLayout(false);
             this.SpaceShipBackGround.PerformLayout();
+            this.panel_MBtnTexture.ResumeLayout(false);
+            this.panel_SDBtnTexture.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Pl_PlanetHolograma)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.AccessPB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ConnectToPlanetPB)).EndInit();
@@ -350,7 +453,6 @@ namespace NauPACS
         private System.Windows.Forms.Button btn_conectar_servidor;
         private System.Windows.Forms.Button btn_desconectar_servidor;
         private System.Windows.Forms.ComboBox cmb_Nau;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btn_PlanetConnect;
         private System.Windows.Forms.Button btn_enviarFichero;
         private System.Windows.Forms.DataGridView dtg_Delivery;
@@ -365,6 +467,11 @@ namespace NauPACS
         private System.Windows.Forms.PictureBox AccessPB;
         private System.Windows.Forms.PictureBox ConnectToPlanetPB;
         private System.Windows.Forms.PictureBox Pl_PlanetHolograma;
+        private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.Button btn_ShutDown;
+        private System.Windows.Forms.Button btn_Minimize;
+        private System.Windows.Forms.Panel panel_MBtnTexture;
+        private System.Windows.Forms.Panel panel_SDBtnTexture;
     }
 }
 

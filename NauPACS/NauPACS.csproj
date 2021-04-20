@@ -134,5 +134,8 @@
   <ItemGroup>
     <None Include="Resources\SpaceShip_ButtonTextureº.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SpaceTransaction.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
